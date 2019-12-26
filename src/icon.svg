@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="512" height="512" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="c">
+      <use xlink:href="#a" clip-rule="evenodd"/>
+    </clipPath>
+    <clipPath id="d">
+      <use xlink:href="#b"/>
+    </clipPath>
+    <path d="M0 241C0 107.899 107.899 0 241 0s241 107.899 241 241-107.899 241-241 241S0 374.101 0 241z" id="b"/>
+    <path id="a" d="M0 0h512v512H0z"/>
+  </defs>
+  <g clip-path="url(#c)">
+    <use xlink:href="#a" fill="#FFF"/>
+    <path d="M101.56 182.56c5.13-5.13 11.34-7.56 19.44-7.56h81c7.29 0 13.5 2.43 19.17 7.56 5.4 5.13 7.83 11.34 7.83 19.44v27h-40.5v-13.5h-54v81h54V283H229v27c0 8.1-2.43 14.31-7.83 19.44-5.67 5.13-11.88 7.56-19.17 7.56h-81c-8.1 0-14.31-2.43-19.44-7.56C96.43 324.31 94 318.1 94 310V202c0-8.1 2.43-14.31 7.56-19.44zm189.27 0c5.67-5.13 11.88-7.56 19.17-7.56h81c8.1 0 14.31 2.43 19.44 7.56 5.13 5.13 7.56 11.34 7.56 19.44v27h-40.5v-13.5h-54v81h54V283H418v27c0 8.1-2.43 14.31-7.56 19.44-5.13 5.13-11.34 7.56-19.44 7.56h-81c-7.29 0-13.5-2.43-19.17-7.56-5.4-5.13-7.83-11.34-7.83-19.44V202c0-8.1 2.43-14.31 7.83-19.44z" fill="#4CAF50" fill-rule="evenodd"/>
+    <g clip-path="url(#d)" transform="translate(16 16)">
+      <use xlink:href="#b" fill="none" stroke="#4CAF50" stroke-width="80"/>
+    </g>
+  </g>
+</svg>

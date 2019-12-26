@@ -1,0 +1,111 @@
+{
+  "name": "capper",
+  "productName": "capper",
+  "version": "0.0.0",
+  "description": "My awesome module.",
+  "repository": "https://github.com/Richienb/capper.git",
+  "author": "Richie Bendall <richiebendall@gmail.com>",
+  "license": "MIT",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "xo"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@sentry/electron": "^1.1.0",
+    "array-move": "^2.2.1",
+    "electron-squirrel-startup": "^1.0.0",
+    "fs-extra": "^8.1.0",
+    "jquery": "^3.4.1",
+    "lodash": "^4.17.15",
+    "material-components-web": "^4.0.0",
+    "normalize.css": "^8.0.1",
+    "read-pkg": "^5.2.0",
+    "rxjs": "^6.5.3",
+    "save-file": "^2.3.1",
+    "subtitle": "^2.0.3"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "6.0.0-beta.47",
+    "@electron-forge/maker-deb": "6.0.0-beta.47",
+    "@electron-forge/maker-rpm": "6.0.0-beta.47",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.47",
+    "@electron-forge/maker-zip": "6.0.0-beta.47",
+    "electron": "7.1.5",
+    "eslint-config-richienb": "^0.2.3",
+    "xo": "^0.25.3"
+  },
+  "resolutions": {
+    "eslint": "^6.8.0"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "icon": "src/icon.icns"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "Capper"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  },
+  "xo": {
+    "extends": "richienb/browser",
+    "ignores": [
+      "src/fabric/*.js"
+    ],
+    "rules": {
+      "node/no-unpublished-require": [
+        "error",
+        {
+          "allowModules": [
+            "electron"
+          ]
+        }
+      ]
+    },
+    "overrides": [
+      {
+        "files": "src/app.js",
+        "globals": [
+          "fabric"
+        ],
+        "rules": {
+          "import/no-unassigned-import": [
+            "error",
+            {
+              "allow": [
+                "src/fabric"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
