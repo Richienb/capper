@@ -1,8 +1,8 @@
 {
   "name": "capper",
   "productName": "capper",
-  "version": "0.0.0",
-  "description": "My awesome module.",
+  "version": "0.1.0",
+  "description": "Captions engine.",
   "repository": "https://github.com/Richienb/capper.git",
   "author": "Richie Bendall <richiebendall@gmail.com>",
   "license": "MIT",
@@ -17,7 +17,13 @@
     "publish": "electron-forge publish",
     "lint": "xo"
   },
-  "keywords": [],
+  "keywords": [
+    "captions",
+    "subtitles",
+    "text",
+    "audio",
+    "gui"
+  ],
   "dependencies": {
     "@sentry/electron": "^1.1.0",
     "array-move": "^2.2.1",
@@ -30,14 +36,18 @@
     "read-pkg": "^5.2.0",
     "rxjs": "^6.5.3",
     "save-file": "^2.3.1",
-    "subtitle": "^2.0.3"
+    "subtitle": "^2.0.3",
+    "update-electron-app": "^1.5.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.47",
     "@electron-forge/maker-deb": "6.0.0-beta.47",
+    "@electron-forge/maker-flatpak": "^6.0.0-beta.47",
     "@electron-forge/maker-rpm": "6.0.0-beta.47",
+    "@electron-forge/maker-snap": "^6.0.0-beta.47",
     "@electron-forge/maker-squirrel": "6.0.0-beta.47",
     "@electron-forge/maker-zip": "6.0.0-beta.47",
+    "@electron-forge/publisher-github": "^6.0.0-beta.47",
     "electron": "7.1.5",
     "eslint-config-richienb": "^0.2.3",
     "xo": "^0.25.3"
@@ -58,18 +68,57 @@
           }
         },
         {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
+          "name": "@electron-forge/maker-zip"
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "options": {
+              "maintainer": "Richie Bendall",
+              "homepage": "https://richienb.github.io"
+            }
+          }
         },
         {
           "name": "@electron-forge/maker-rpm",
-          "config": {}
+          "config": {
+            "options": {
+              "maintainer": "Richie Bendall",
+              "homepage": "https://richienb.github.io"
+            }
+          }
+        },
+        {
+          "name": "@electron-forge/maker-flatpak",
+          "config": {
+            "options": {
+              "categories": [
+                "Video"
+              ]
+            }
+          }
+        },
+        {
+          "name": "@electron-forge/maker-snap",
+          "config": {
+            "features": {
+              "audio": true,
+              "browserSandbox": true
+            },
+            "summary": "Captions engine."
+          }
+        }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "Richienb",
+              "name": "capper"
+            },
+            "prerelease": true
+          }
         }
       ]
     }

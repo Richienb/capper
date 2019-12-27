@@ -1,8 +1,9 @@
+const path = require("path")
+const { app, BrowserWindow } = require("electron")
 const Sentry = require("@sentry/electron")
 Sentry.init({ dsn: "https://be5edffe19ef4496b415f7f07eecab65@sentry.io/1866073" })
 
-const { app, BrowserWindow } = require("electron")
-const path = require("path")
+require("update-electron-app")()
 
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required")
 
@@ -39,8 +40,7 @@ const createWindow = () => {
     mainWindow.loadURL(`file://${__dirname}/index.html`)
 
     // Open the DevTools.
-    // TODO: Disable this
-    mainWindow.webContents.openDevTools()
+    // mainWindow.webContents.openDevTools()
 
     // Emitted when the window is closed.
     mainWindow.on("closed", () => {

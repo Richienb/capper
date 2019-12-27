@@ -1,14 +1,13 @@
+const { remote: electron } = require("electron")
+const path = require("path")
 const Sentry = require("@sentry/electron")
 Sentry.init({ dsn: "https://be5edffe19ef4496b415f7f07eecab65@sentry.io/1866073" })
-
 const _ = require("lodash")
 const { Observable } = require("rxjs")
 const arrayMove = require("array-move")
 const readPkg = require("read-pkg")
 const mdc = require("material-components-web")
-const { remote: electron } = require("electron")
-const save = require("save-file")
-const path = require("path")
+const saveFile = require("save-file")
 
 const eachFrame = require("./utils/each-frame")
 const parseSrt = require("./utils/parse-srt")
@@ -18,74 +17,72 @@ const calculateWidth = (resolution) => resolution / 9 * 16
 window.addEventListener("load", async () => {
     const $ = require("jquery")
 
-    const fileInput = (element, callback) => {
-        $(element).on("click", () => $(`${element}-sel`).click())
-        $(`${element}-sel`).on("change", () => callback($(`${element}-sel`).get(0).files[0].path))
-    }
-
     mdc.autoInit()
 
     require("./fabric")
 
     // User-provided options
-    // const opts = {
-    //     image: "../demo/6954568.png",
-    //     audio: "../demo/DELACEY - Dream It Possible (Official Audio) (1).mp3",
-    //     subtitles: "./demo/Dream It Possible.srt",
-    //     name: "Dream It Possible",
-    // }
     const opts = {
         fps: 60,
         resolution: 1080,
+        format: "video/webm",
         image: null,
         audio: null,
         subtitles: null,
         name: null,
     }
 
+    // Set canvas size
     $("canvas").attr({
         height: 1080,
         width: calculateWidth(opts.resolution),
     })
 
-    function validateOpts() {
+    // Handle file inputs
+    function fileInput(name) {
+        const element = `.opts__${name}`
+        $(element).on("click", () => $(`${element}-sel`).click())
+        $(`${element}-sel`).on("change", () => {
+            opts[name] = $(`${element}-sel`).get(0).files[0].path
+
+            validateOptions()
+        })
+    }
+
+    // Validate options
+    function validateOptions() {
         const disabled = !(opts.image && opts.audio && opts.subtitles && opts.name)
         $(".opts__play").prop("disabled", disabled)
         $(".opts__record").prop("disabled", disabled)
     }
 
-    fileInput(".opts__audio", (path) => {
-        opts.audio = path
-        validateOpts()
-    })
+    // File input for audio
+    fileInput("audio")
 
-    fileInput(".opts__image", (path) => {
-        opts.image = path
-        validateOpts()
-    })
+    // File input for image
+    fileInput("image")
 
-    fileInput(".opts__subtitles", (path) => {
-        opts.subtitles = path
-        validateOpts()
-    })
+    // File input for subtitles
+    fileInput("subtitles")
 
+    // Text input for name
     $(".opts__name").get(0).MDCTextField.listen("input", () => {
         opts.name = $(".opts__name").get(0).MDCTextField.value
-        validateOpts()
+        validateOptions()
     })
 
+    // Play
     $(".opts__play").on("click", () => {
         play()
     })
 
+    // Record
     $(".opts__record").on("click", () => {
         record()
     })
 
     // Audio object
     const audio = new Audio()
-
-    window.audio = audio
 
     // Get package version
     const { version } = await readPkg()
@@ -95,8 +92,6 @@ window.addEventListener("load", async () => {
 
     // Fabric object
     const canvas = new fabric.StaticCanvas(document.querySelector("canvas"), { backgroundColor: "black" })
-
-    window.canvas = canvas
 
     // Common options for animation
     const animateOpts = {
@@ -156,7 +151,7 @@ window.addEventListener("load", async () => {
             // Create & add stub
             const stub = new fabric.Rect({
                 width: rem(0.15), height: stubHeight,
-                left: (start / 1000 / audio.duration * (canvas.width - rem(3))) + rem(1.5), top: canvas.height - stubHeight - rem(1.35),
+                left: (Number(start) / 1000 / audio.duration * (canvas.width - rem(3))) + rem(1.5), top: canvas.height - stubHeight - rem(1.35),
                 fill: "white",
                 opacity: 0.6,
             })
@@ -302,7 +297,7 @@ window.addEventListener("load", async () => {
                     })
                     canvas.add(subs[2])
                     subs[2].centerV()
-                    subs[2].set("top", subs[2].get("top") + subSpacing * 2)
+                    subs[2].set("top", subs[2].get("top") + (subSpacing * 2))
 
                     subs[2].animate("opacity", "0.8", animateOpts)
                     subs[2].animate("top", `-=${subSpacing}`, animateOpts)
@@ -314,20 +309,29 @@ window.addEventListener("load", async () => {
         })
     }
 
-    const sources = [audio.captureStream(), document.querySelector("canvas").captureStream()]
-
     async function record() {
+        // Disable settings
         $(".opts button").prop("disabled", true)
         $(".opts__name").get(0).MDCTextField.disabled = true
 
-        const options = { mimeType: "video/webm" }
-
+        // Configure options
+        const options = { mimeType: opts.format }
         const recordedBlobs = []
 
+        // Starting playing
+        await play()
+
+        // Prepare recorder
+        const sources = [audio.captureStream(), document.querySelector("canvas").captureStream()]
         const streams = new MediaStream([...sources[1].getVideoTracks(), ...sources[0].getAudioTracks()])
         const mediaRecorder = new MediaRecorder(streams, options)
 
-        mediaRecorder.onstop = async function handleStop(event) {
+        // Start recordings
+        mediaRecorder.start()
+
+        // When recording is stopped
+        mediaRecorder.onstop = async () => {
+            // Create blob of video file
             const superBuffer = new Blob(recordedBlobs, { type: options.mimeType })
 
             // Get file save location
@@ -344,22 +348,27 @@ window.addEventListener("load", async () => {
                 ],
             })
 
-            await save(await superBuffer.arrayBuffer(), filename)
+            // Save the blob to a file
+            await saveFile(await superBuffer.arrayBuffer(), filename)
 
+            // Re-enable settings
             $(".opts button").prop("disabled", false)
             $(".opts__name").get(0).MDCTextField.disabled = false
         }
-        mediaRecorder.ondataavailable = function handleDataAvailable(event) {
-            if (event.data && event.data.size > 0) {
-                recordedBlobs.push(event.data)
+
+        // When data enabled
+        mediaRecorder.ondataavailable = ({ data }) => {
+            // If data exists
+            if (data && data.size > 0) {
+                // Push the data to an array
+                recordedBlobs.push(data)
             }
         }
-        mediaRecorder.start()
-        await play()
+
+        // When the audio ends
         audio.addEventListener("ended", () => {
+            // Stop the recording
             mediaRecorder.stop()
         })
     }
-
-    window.record = record
 })
