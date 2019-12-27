@@ -33,7 +33,6 @@
     "lodash": "^4.17.15",
     "material-components-web": "^4.0.0",
     "normalize.css": "^8.0.1",
-    "read-pkg": "^5.2.0",
     "rxjs": "^6.5.3",
     "save-file": "^2.3.1",
     "subtitle": "^2.0.3",

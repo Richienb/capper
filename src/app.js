@@ -5,7 +5,6 @@ Sentry.init({ dsn: "https://be5edffe19ef4496b415f7f07eecab65@sentry.io/1866073" 
 const _ = require("lodash")
 const { Observable } = require("rxjs")
 const arrayMove = require("array-move")
-const readPkg = require("read-pkg")
 const mdc = require("material-components-web")
 const saveFile = require("save-file")
 
@@ -85,7 +84,7 @@ window.addEventListener("load", async () => {
     const audio = new Audio()
 
     // Get package version
-    const { version } = await readPkg()
+    const version = electron.app.getVersion()
 
     // `rem` support
     const rem = (rem) => rem * parseFloat(getComputedStyle(document.documentElement).fontSize)
