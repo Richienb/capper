@@ -212,15 +212,15 @@
   optionalDependencies:
     electron-installer-redhat "^2.0.0"
 
-"@electron-forge/maker-snap@^6.0.0-beta.47":
-  version "6.0.0-beta.47"
-  resolved "https://registry.yarnpkg.com/@electron-forge/maker-snap/-/maker-snap-6.0.0-beta.47.tgz#279fae64a14e2939711150aa282d23d8fb6d4472"
-  integrity sha512-WG5QYIPF0XWH4x7dO7m/eQapny5PY728f7uUzd0BFT2MHLrKI5zw3rzhQG5pAHcQN4tb7pRYzNBfEJMqNnPxRQ==
+"@electron-forge/maker-snap@^6.0.0-beta.48":
+  version "6.0.0-beta.48"
+  resolved "https://registry.yarnpkg.com/@electron-forge/maker-snap/-/maker-snap-6.0.0-beta.48.tgz#7953355da6f2f0e157fab7f09b462804bf3cec6a"
+  integrity sha512-2Tzs7K16YAMBDFwjG0XMzR3SfnrJcqR85yX5qOlm60TkqNFS67r8rNL6kHO6khse3VNo9oBXAA4kXhJ3g7DutA==
   dependencies:
-    "@electron-forge/maker-base" "6.0.0-beta.47"
-    "@electron-forge/shared-types" "6.0.0-beta.47"
+    "@electron-forge/maker-base" "6.0.0-beta.48"
+    "@electron-forge/shared-types" "6.0.0-beta.48"
   optionalDependencies:
-    electron-installer-snap "^4.0.0"
+    electron-installer-snap "^5.0.0"
 
 "@electron-forge/maker-squirrel@6.0.0-beta.47":
   version "6.0.0-beta.47"
@@ -2143,7 +2143,7 @@ electron-installer-common@^0.10.0:
     semver "^7.1.1"
     tmp-promise "^2.0.1"
 
-electron-installer-common@^0.7.0, electron-installer-common@^0.7.1:
+electron-installer-common@^0.7.1:
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/electron-installer-common/-/electron-installer-common-0.7.3.tgz#95beedc4c6abd287a2f3ef60c545abdf804d90a0"
   integrity sha512-l4chYFTWr6uWODKYUXeC+Z4tqGa3b8e+Y2WUBf3F7Ruv6yYzZ+Ccic65oXreeotx09B7sUx1KTuwXRsRJHKlMw==
@@ -2183,20 +2183,17 @@ electron-installer-redhat@^2.0.0:
     word-wrap "^1.2.3"
     yargs "^13.2.2"
 
-electron-installer-snap@^4.0.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/electron-installer-snap/-/electron-installer-snap-4.1.0.tgz#b36e5d0640144073707d6ce848f94b447beecdbe"
-  integrity sha512-4h9o0/D4tSIj+jje5JlIoNn8zHggVYeNACtZ6w626E4bveoUeQjzq2DOuBiF0+OFo9qvvOGhRjoENMHfXBze4A==
+electron-installer-snap@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/electron-installer-snap/-/electron-installer-snap-5.0.0.tgz#09553749b367aa6d00c1f92e57d3f3e05daced5a"
+  integrity sha512-M5ADJ7MP3QX1bRfdMZer4B/t5p2fVWciCXkqUs1t3kBSyxEJw4N2jNMydAeJRLend9cbM1E2Jq5+bhPEES85Kg==
   dependencies:
-    cross-spawn-promise "^0.10.1"
     debug "^4.1.1"
-    electron-installer-common "^0.7.0"
+    electron-installer-common "^0.10.0"
     fs-extra "^8.0.1"
     js-yaml "^3.10.0"
-    lodash.filter "^4.6.0"
-    lodash.merge "^4.6.0"
-    lodash.pull "^4.1.0"
-    semver "^6.1.0"
+    lodash "^4.17.15"
+    semver "^7.1.1"
     tmp-promise "^2.0.1"
     which "^2.0.1"
     yargs "^15.0.1"
@@ -4090,11 +4087,6 @@ lodash.defaultsdeep@^4.6.1:
   resolved "https://registry.yarnpkg.com/lodash.defaultsdeep/-/lodash.defaultsdeep-4.6.1.tgz#512e9bd721d272d94e3d3a63653fa17516741ca6"
   integrity sha512-3j8wdDzYuWO3lM3Reg03MuQR957t287Rpcxp1njpEa8oDrikb+FwGdW3n+FELh/A6qib6yPit0j/pv9G/yeAqA==
 
-lodash.filter@^4.6.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/lodash.filter/-/lodash.filter-4.6.0.tgz#668b1d4981603ae1cc5a6fa760143e480b4c4ace"
-  integrity sha1-ZosdSYFgOuHMWm+nYBQ+SAtMSs4=
-
 lodash.get@^4.0.0, lodash.get@^4.4.2:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
@@ -4110,7 +4102,7 @@ lodash.kebabcase@^4.1.1:
   resolved "https://registry.yarnpkg.com/lodash.kebabcase/-/lodash.kebabcase-4.1.1.tgz#8489b1cb0d29ff88195cceca448ff6d6cc295c36"
   integrity sha1-hImxyw0p/4gZXM7KRI/21swpXDY=
 
-lodash.merge@^4.6.0, lodash.merge@^4.6.2:
+lodash.merge@^4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
@@ -4119,11 +4111,6 @@ lodash.mergewith@^4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lodash.mergewith/-/lodash.mergewith-4.6.2.tgz#617121f89ac55f59047c7aec1ccd6654c6590f55"
   integrity sha512-GK3g5RPZWTRSeLSpgP8Xhra+pnjBC56q9FZYe1d5RN3TJ35dbkGy3YqBSMbyCrlbi+CM9Z3Jk5yTL7RCsqboyQ==
-
-lodash.pull@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/lodash.pull/-/lodash.pull-4.1.0.tgz#60060cc6bd625b4d4567ec27dc45cd1be9eec012"
-  integrity sha1-YAYMxr1iW01FZ+wn3EXNG+nuwBI=
 
 lodash.set@^4.3.2:
   version "4.3.2"
