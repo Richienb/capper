@@ -275,19 +275,19 @@
   resolved "https://registry.yarnpkg.com/@electron-forge/publisher-base/-/publisher-base-6.0.0-beta.47.tgz#695eeaaa3a02283cc43c66d63d21f3da88b5c873"
   integrity sha512-yNFtyrUtbSjfBWZWvCcRvim5dhBQjlG4q5xlC2PcUWPHYUQfLVQRYTSXT3A/nwdlq1Fa7Vjf9sB0yBZgn25NYg==
 
-"@electron-forge/publisher-base@6.0.0-beta.48":
-  version "6.0.0-beta.48"
-  resolved "https://registry.yarnpkg.com/@electron-forge/publisher-base/-/publisher-base-6.0.0-beta.48.tgz#009809e10968b491792018d33897e3a570a62ee2"
-  integrity sha512-0VqIpu4o+Z+Nl1E/9OfFrJHtYXsfnEM8yiLdJbU15Q6jvLnXIboGbC/b6Z1Szq7dH8QLs3c993Bu9FQ66L+GhQ==
+"@electron-forge/publisher-base@6.0.0-beta.49":
+  version "6.0.0-beta.49"
+  resolved "https://registry.yarnpkg.com/@electron-forge/publisher-base/-/publisher-base-6.0.0-beta.49.tgz#e6f55118032bfdc876aaa1969d50c1ce9c7e0bf1"
+  integrity sha512-8NDBsy/xDnySFt0ZCKEKQNPWHClEopKRIEM1tov4N1HZKNsdZzWnOe1zMbBhbjJ+lGF48C/pDH1Y8ZefltwMyQ==
 
-"@electron-forge/publisher-github@^6.0.0-beta.48":
-  version "6.0.0-beta.48"
-  resolved "https://registry.yarnpkg.com/@electron-forge/publisher-github/-/publisher-github-6.0.0-beta.48.tgz#a664b658ffedebcd2b8f50b52aa8d4124e099e84"
-  integrity sha512-fJ1HHdulNf7aLYI96/C3uPT8a4U42O6cVVHba5KSQNNv++Kf7w1uQZB8LypB/wTDqYikp5AGM/cN+xfbKhFTbg==
+"@electron-forge/publisher-github@^6.0.0-beta.49":
+  version "6.0.0-beta.49"
+  resolved "https://registry.yarnpkg.com/@electron-forge/publisher-github/-/publisher-github-6.0.0-beta.49.tgz#079cf48ca319a45ea639f8bb88fd6e06d4791f34"
+  integrity sha512-RgnUJEN78Kgq3X9D+UehifZW1daDR9u0iY7HNqqHWPD0o+GgZ3ojuiEkDZpF27sn+hD1IjiMsOH/E3OIzDh5Gg==
   dependencies:
-    "@electron-forge/async-ora" "6.0.0-beta.48"
-    "@electron-forge/publisher-base" "6.0.0-beta.48"
-    "@electron-forge/shared-types" "6.0.0-beta.48"
+    "@electron-forge/async-ora" "6.0.0-beta.49"
+    "@electron-forge/publisher-base" "6.0.0-beta.49"
+    "@electron-forge/shared-types" "6.0.0-beta.49"
     "@octokit/rest" "^16.42.2"
     fs-extra "^8.1.0"
     lodash "^4.17.15"
