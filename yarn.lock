@@ -183,15 +183,6 @@
     fs-extra "^8.1.0"
     which "^2.0.2"
 
-"@electron-forge/maker-base@6.0.0-beta.48":
-  version "6.0.0-beta.48"
-  resolved "https://registry.yarnpkg.com/@electron-forge/maker-base/-/maker-base-6.0.0-beta.48.tgz#f843580371b4d771713a251383c3ffe8234637ed"
-  integrity sha512-1Ql9EgT5RMy1mkFWMXdN+KPTmZiQnrbJVq/a4mH1VgDTnBlTfJ16PpqhvSiu7V0jrdH2ezOsvZZmSvQui14xig==
-  dependencies:
-    "@electron-forge/shared-types" "6.0.0-beta.48"
-    fs-extra "^8.1.0"
-    which "^2.0.2"
-
 "@electron-forge/maker-base@6.0.0-beta.49":
   version "6.0.0-beta.49"
   resolved "https://registry.yarnpkg.com/@electron-forge/maker-base/-/maker-base-6.0.0-beta.49.tgz#db0ea29f8c2c3fcea888e6d8f3924d1d4e851fbf"
@@ -232,13 +223,13 @@
   optionalDependencies:
     electron-installer-redhat "^2.0.0"
 
-"@electron-forge/maker-snap@^6.0.0-beta.48":
-  version "6.0.0-beta.48"
-  resolved "https://registry.yarnpkg.com/@electron-forge/maker-snap/-/maker-snap-6.0.0-beta.48.tgz#7953355da6f2f0e157fab7f09b462804bf3cec6a"
-  integrity sha512-2Tzs7K16YAMBDFwjG0XMzR3SfnrJcqR85yX5qOlm60TkqNFS67r8rNL6kHO6khse3VNo9oBXAA4kXhJ3g7DutA==
+"@electron-forge/maker-snap@^6.0.0-beta.49":
+  version "6.0.0-beta.49"
+  resolved "https://registry.yarnpkg.com/@electron-forge/maker-snap/-/maker-snap-6.0.0-beta.49.tgz#9dd0a0ea7a66d0d475f30a0a94b10f8b3081a196"
+  integrity sha512-6GMfpxiEN7IxQ5y3i6SMGlrMZK2hOpQ1dnROVewwFGLhbLg+V/jg5kHjnoJFLH8LkgK6UIzhd1BSWBfSWpC5UQ==
   dependencies:
-    "@electron-forge/maker-base" "6.0.0-beta.48"
-    "@electron-forge/shared-types" "6.0.0-beta.48"
+    "@electron-forge/maker-base" "6.0.0-beta.49"
+    "@electron-forge/shared-types" "6.0.0-beta.49"
   optionalDependencies:
     electron-installer-snap "^5.0.0"
 
