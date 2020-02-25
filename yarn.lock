@@ -211,13 +211,13 @@
   optionalDependencies:
     electron-installer-debian "^2.0.0"
 
-"@electron-forge/maker-flatpak@^6.0.0-beta.49":
-  version "6.0.0-beta.49"
-  resolved "https://registry.yarnpkg.com/@electron-forge/maker-flatpak/-/maker-flatpak-6.0.0-beta.49.tgz#07d1b159c0cec16ffc4e3c59dcab0d0b97234c99"
-  integrity sha512-fjbDjCOjOnC4zONOth0lEjaPXS/Txrnjfv0rJA/2rTxb+ts8Arv8F2OnC1t5UdVsvWAWqTmJ7zYvfzE75OTbVA==
+"@electron-forge/maker-flatpak@^6.0.0-beta.50":
+  version "6.0.0-beta.50"
+  resolved "https://registry.yarnpkg.com/@electron-forge/maker-flatpak/-/maker-flatpak-6.0.0-beta.50.tgz#23aeb040d77b91ed391edf87cda305a82b2d6a63"
+  integrity sha512-ylYyKP32yENxIcQ+sjpZB2Pto5u8pSTny5Id2KC2JhcYzkem4nZQlL6rHqFqdRC2nGXcbkazR65zKLum66ZyJA==
   dependencies:
-    "@electron-forge/maker-base" "6.0.0-beta.49"
-    "@electron-forge/shared-types" "6.0.0-beta.49"
+    "@electron-forge/maker-base" "6.0.0-beta.50"
+    "@electron-forge/shared-types" "6.0.0-beta.50"
     fs-extra "^8.1.0"
   optionalDependencies:
     "@malept/electron-installer-flatpak" "^0.11.0"
