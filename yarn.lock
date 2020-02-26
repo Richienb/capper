@@ -29,17 +29,6 @@
     ora "^4.0.3"
     pretty-ms "^5.0.0"
 
-"@electron-forge/async-ora@6.0.0-beta.49":
-  version "6.0.0-beta.49"
-  resolved "https://registry.yarnpkg.com/@electron-forge/async-ora/-/async-ora-6.0.0-beta.49.tgz#208a70cb79df5eabcfff6d0a1d323fdb9478ad15"
-  integrity sha512-Oth8ed0lrqIwC3TrKPpYelOvkGgFWX5bWdo69zzFqiNL1ryzGfclG0kgGbADY/LNsyGu3ycqvG6NQFiOYhnbtQ==
-  dependencies:
-    colors "^1.4.0"
-    debug "^4.1.0"
-    log-symbols "^3.0.0"
-    ora "^4.0.3"
-    pretty-ms "^5.0.0"
-
 "@electron-forge/async-ora@6.0.0-beta.50":
   version "6.0.0-beta.50"
   resolved "https://registry.yarnpkg.com/@electron-forge/async-ora/-/async-ora-6.0.0-beta.50.tgz#5979a009fdb2bc5650752b0a425d4c2cbfaf53f8"
@@ -183,15 +172,6 @@
     fs-extra "^8.1.0"
     which "^2.0.2"
 
-"@electron-forge/maker-base@6.0.0-beta.49":
-  version "6.0.0-beta.49"
-  resolved "https://registry.yarnpkg.com/@electron-forge/maker-base/-/maker-base-6.0.0-beta.49.tgz#db0ea29f8c2c3fcea888e6d8f3924d1d4e851fbf"
-  integrity sha512-S8WIRvt725LFnRNpdQ0aVal6u96MzoKepJlnh+BjUGQ86mOBZ7vtkyf3ipm0PL40XDwJMuOgy7vTzL/07F8yow==
-  dependencies:
-    "@electron-forge/shared-types" "6.0.0-beta.49"
-    fs-extra "^8.1.0"
-    which "^2.0.2"
-
 "@electron-forge/maker-base@6.0.0-beta.50":
   version "6.0.0-beta.50"
   resolved "https://registry.yarnpkg.com/@electron-forge/maker-base/-/maker-base-6.0.0-beta.50.tgz#0fd3be00e92dc6f5639b3086d785c47858a1591f"
@@ -299,16 +279,6 @@
   integrity sha512-bD2bId56tuqhVzPRDEGaS4Qw4K/AFleftstznQOmkBDpBG3R+roN4y35kiiZ7aVu3ymzzFQ414Kh5s9MwBKHPw==
   dependencies:
     "@electron-forge/async-ora" "6.0.0-beta.47"
-    "@types/electron-packager" "^14.0.0"
-    electron-rebuild "^1.8.6"
-    ora "^4.0.3"
-
-"@electron-forge/shared-types@6.0.0-beta.49":
-  version "6.0.0-beta.49"
-  resolved "https://registry.yarnpkg.com/@electron-forge/shared-types/-/shared-types-6.0.0-beta.49.tgz#73163e6de405b0381adfb591b1ef6de730cac31d"
-  integrity sha512-SxH3kUb3cr2lwdMOqapDUib/roLmk665lEC1gKLJkRid/e/mkC/7Q+Tn14WHCOte0O1opGNgzVDnOlfFjdatEA==
-  dependencies:
-    "@electron-forge/async-ora" "6.0.0-beta.49"
     "@types/electron-packager" "^14.0.0"
     electron-rebuild "^1.8.6"
     ora "^4.0.3"
@@ -1070,10 +1040,10 @@
     "@sentry/utils" "5.10.2"
     tslib "^1.9.3"
 
-"@sentry/electron@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@sentry/electron/-/electron-1.2.0.tgz#4e5498d335d31944a565a3b5ec63c6b9f451a12f"
-  integrity sha512-LnzCzUXI52JcSKc2JbXqQa4BtLGAVZvgN0l1aunR6nJ+DKR3Xg41NpiJ1PgvIlf1pbjz4EPcGhAewV94dMc2VA==
+"@sentry/electron@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@sentry/electron/-/electron-1.2.1.tgz#edf4de4b2e680ad14aeda7ad6ef2e19f8f2015f1"
+  integrity sha512-8HtBjMvLpKbGRnf/iMWd/EXYatkepf1hsY6myIjH8egyPoRNbyxJhiAFoJeZ5GLbWRCWm7UuHkG4hBeyxUNZhg==
   dependencies:
     "@sentry/browser" "~5.10.2"
     "@sentry/core" "~5.10.2"
