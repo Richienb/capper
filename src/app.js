@@ -160,7 +160,7 @@ window.addEventListener("load", async () => {
 
 		// Title
 		const title = [
-			new fabric.Text(`${options_.name} - Lyrics`, {
+			new fabric.Text(options_.name, {
 				fontFamily: "Poppins Medium",
 				fill: "white",
 				fontSize: rem(3),
