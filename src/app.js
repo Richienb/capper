@@ -28,10 +28,15 @@ window.addEventListener("load", async () => {
 		fps: 60,
 		resolution: 1080,
 		format: "video/webm",
-		image: null,
-		audio: null,
-		subtitles: null,
-		name: null
+		image: undefined,
+		audio: undefined,
+		subtitles: undefined,
+		name: undefined
+	}
+
+	const fontFamily = {
+		normal: "Poppins",
+		medium: "Poppins Medium"
 	}
 
 	// Set canvas size
@@ -42,7 +47,7 @@ window.addEventListener("load", async () => {
 
 	// Handle file inputs
 	function fileInput(name) {
-		const element = `.opts__${name}`
+		const element = `.options__${name}`
 		$(element).on("click", () => $(`${element}-sel`).click())
 		$(`${element}-sel`).on("change", () => {
 			options_[name] = $(`${element}-sel`).get(0).files[0].path
@@ -54,8 +59,8 @@ window.addEventListener("load", async () => {
 	// Validate options
 	function toggleButtonEnabled() {
 		const disabled = !(options_.image && options_.audio && options_.subtitles && options_.name)
-		$(".opts__play").prop("disabled", disabled)
-		$(".opts__record").prop("disabled", disabled)
+		$(".options__play").prop("disabled", disabled)
+		$(".options__record").prop("disabled", disabled)
 	}
 
 	// File input for audio
@@ -68,18 +73,18 @@ window.addEventListener("load", async () => {
 	fileInput("subtitles")
 
 	// Text input for name
-	$(".opts__name").get(0).MDCTextField.listen("input", () => {
-		options_.name = $(".opts__name").get(0).MDCTextField.value
+	$(".options__name").get(0).MDCTextField.listen("input", () => {
+		options_.name = $(".options__name").get(0).MDCTextField.value
 		toggleButtonEnabled()
 	})
 
 	// Play
-	$(".opts__play").on("click", () => {
+	$(".options__play").on("click", () => {
 		play()
 	})
 
 	// Record
-	$(".opts__record").on("click", () => {
+	$(".options__record").on("click", () => {
 		record()
 	})
 
@@ -90,7 +95,7 @@ window.addEventListener("load", async () => {
 	const version = electron.app.getVersion()
 
 	// `rem` support
-	const rem = rem => rem * parseFloat(getComputedStyle(document.documentElement).fontSize)
+	const rem = (rem, fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)) => rem * fontSize
 
 	// Fabric object
 	const canvas = new fabric.StaticCanvas(document.querySelector("canvas"), { backgroundColor: "black" })
@@ -164,14 +169,14 @@ window.addEventListener("load", async () => {
 		// Title
 		const title = [
 			new fabric.Text(options_.name, {
-				fontFamily: "Poppins Medium",
+				fontFamily: fontFamily.medium,
 				fill: "white",
 				fontSize: rem(3),
 				left: canvas.width / 3,
 				top: canvas.width / 4
 			}),
 			new fabric.Text(`Powered by Richienb/capper v${version}`, {
-				fontFamily: "Poppins",
+				fontFamily: fontFamily.normal,
 				fill: "rgba(255, 255, 255, 0.8)",
 				fontSize: rem(2),
 				left: canvas.width / 3,
@@ -240,30 +245,64 @@ window.addEventListener("load", async () => {
 
 				// Current subtitle
 				subs[1] = new fabric.Text(currentSubtitle, {
-					fontFamily: "Poppins Medium",
+					fontFamily: fontFamily.medium,
 					fill: "white",
 					fontSize: rem(3),
-					left: canvas.width / 3,
 					opacity: 0
 				})
 				canvas.add(subs[1])
 				subs[1].centerV()
+				subs[1].centerH()
 
 				// Next subtitle
 				subs[2] = new fabric.Text(nextSubtitle, {
-					fontFamily: "Poppins",
+					fontFamily: fontFamily.normal,
 					fill: "white",
-					fontSize: rem(2.5),
-					left: canvas.width / 3,
+					fontSize: rem(3),
 					opacity: 0
 				})
 				canvas.add(subs[2])
 				subs[2].centerV()
+				subs[2].centerH()
 				subs[2].set("top", subs[2].get("top") + subSpacing)
 
 				// Add subtitles
 				subs[1].animate("opacity", "1", animationOptions)
 				subs[2].animate("opacity", "0.8", animationOptions)
+
+				albumImage.animate("top", albumImage.top - rem(2), animationOptions)
+				albumImage.animate("opacity", 0, animationOptions)
+
+				const titleAnimationOptions = {
+					duration: 500,
+					...animationOptions
+				}
+
+				const newAlbumImage = fabric.util.object.clone(albumImage)
+
+				canvas.add(newAlbumImage)
+				newAlbumImage.set({
+					top: 0,
+					left: 32,
+					opacity: 0
+				})
+				newAlbumImage.scaleToWidth(64)
+				newAlbumImage.animate("opacity", 1, titleAnimationOptions)
+				newAlbumImage.animate("top", 32, titleAnimationOptions)
+
+				const newAlbumText = new fabric.Text(options_.name, {
+					fontFamily: fontFamily.normal,
+					fill: "white",
+					fontSize: rem(2),
+					left: 112,
+					top: 0,
+					opacity: 0
+				})
+
+				canvas.add(newAlbumText)
+
+				newAlbumText.animate("opacity", 1, titleAnimationOptions)
+				newAlbumText.animate("top", 32, titleAnimationOptions)
 			} else {
 				// Revert previous stub
 				stubs[subtitleIndex - 1].animate("opacity", 0.8, animationOptions)
@@ -278,29 +317,27 @@ window.addEventListener("load", async () => {
 
 				// Current subtitle -> Previous subtitle
 				subs[1].animate("opacity", "0.8", animationOptions)
-				subs[1].animate("fontSize", rem(2.5), animationOptions)
 				subs[1].animate("top", `-=${subSpacing}`, animationOptions)
-				subs[1].set("fontFamily", "Poppins")
+				subs[1].set("fontFamily", fontFamily.normal)
 				moveArrayItem(subs, 1, 0)
 
 				// Next subtitle -> Current subtitle
 				subs[2].animate("opacity", "1", animationOptions)
-				subs[2].animate("fontSize", rem(3), animationOptions)
 				subs[2].animate("top", `-=${subSpacing}`, animationOptions)
-				subs[2].set("fontFamily", "Poppins Medium")
+				subs[2].set("fontFamily", fontFamily.medium)
 				moveArrayItem(subs, 2, 1)
 
 				// None -> Next subtitle
 				if (nextSubtitle) {
 					subs[2] = new fabric.Text(nextSubtitle, {
-						fontFamily: "Poppins",
+						fontFamily: fontFamily.normal,
 						fill: "white",
-						fontSize: rem(2.5),
-						left: canvas.width / 3,
+						fontSize: rem(3),
 						opacity: 0
 					})
 					canvas.add(subs[2])
 					subs[2].centerV()
+					subs[2].centerH()
 					subs[2].set("top", subs[2].get("top") + (subSpacing * 2))
 
 					subs[2].animate("opacity", "0.8", animationOptions)
@@ -315,8 +352,8 @@ window.addEventListener("load", async () => {
 
 	async function record() {
 		// Disable settings
-		$(".opts button").prop("disabled", true)
-		$(".opts__name").get(0).MDCTextField.disabled = true
+		$(".options button").prop("disabled", true)
+		$(".options__name").get(0).MDCTextField.disabled = true
 
 		// Configure options
 		const options = { mimeType: options_.format }
@@ -356,8 +393,8 @@ window.addEventListener("load", async () => {
 			await fs.writeFile(filename, Buffer.from(await superBuffer.arrayBuffer()))
 
 			// Re-enable settings
-			$(".opts button").prop("disabled", false)
-			$(".opts__name").get(0).MDCTextField.disabled = false
+			$(".options button").prop("disabled", false)
+			$(".options__name").get(0).MDCTextField.disabled = false
 		}
 
 		// When data enabled

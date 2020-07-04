@@ -1,4 +1,4 @@
 const { parse: parseSrt } = require("subtitle")
 const { promises: fs } = require("fs")
 
-module.exports = async path => parseSrt(await fs.readFile(path, "utf8"))
+module.exports = async filepath => parseSrt(await fs.readFile(filepath, "utf8"))
