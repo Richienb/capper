@@ -161,14 +161,14 @@ window.addEventListener("load", async () => {
 		// Title
 		const title = [
 			new fabric.Text(`${options_.name} - Lyrics`, {
-				fontFamily: "Roboto Medium",
+				fontFamily: "Poppins Medium",
 				fill: "white",
 				fontSize: rem(3),
 				left: canvas.width / 3,
 				top: canvas.width / 4
 			}),
 			new fabric.Text(`Powered by Richienb/capper v${version}`, {
-				fontFamily: "Roboto",
+				fontFamily: "Poppins",
 				fill: "rgba(255, 255, 255, 0.8)",
 				fontSize: rem(2),
 				left: canvas.width / 3,
@@ -237,7 +237,7 @@ window.addEventListener("load", async () => {
 
 				// Current subtitle
 				subs[1] = new fabric.Text(currentSubtitle, {
-					fontFamily: "Roboto Medium",
+					fontFamily: "Poppins Medium",
 					fill: "white",
 					fontSize: rem(3),
 					left: canvas.width / 3,
@@ -248,7 +248,7 @@ window.addEventListener("load", async () => {
 
 				// Next subtitle
 				subs[2] = new fabric.Text(nextSubtitle, {
-					fontFamily: "Roboto",
+					fontFamily: "Poppins",
 					fill: "white",
 					fontSize: rem(2.5),
 					left: canvas.width / 3,
@@ -278,20 +278,20 @@ window.addEventListener("load", async () => {
 				subs[1].animate("opacity", "0.8", animationOptions)
 				subs[1].animate("fontSize", rem(2.5), animationOptions)
 				subs[1].animate("top", `-=${subSpacing}`, animationOptions)
-				subs[1].set("fontFamily", "Roboto")
+				subs[1].set("fontFamily", "Poppins")
 				moveArrayItem(subs, 1, 0)
 
 				// Next subtitle -> Current subtitle
 				subs[2].animate("opacity", "1", animationOptions)
 				subs[2].animate("fontSize", rem(3), animationOptions)
 				subs[2].animate("top", `-=${subSpacing}`, animationOptions)
-				subs[2].set("fontFamily", "Roboto Medium")
+				subs[2].set("fontFamily", "Poppins Medium")
 				moveArrayItem(subs, 2, 1)
 
 				// None -> Next subtitle
 				if (nextSubtitle) {
 					subs[2] = new fabric.Text(nextSubtitle, {
-						fontFamily: "Roboto",
+						fontFamily: "Poppins",
 						fill: "white",
 						fontSize: rem(2.5),
 						left: canvas.width / 3,

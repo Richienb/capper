@@ -1,60 +1,71 @@
 /* roboto-300 - latin */
 @font-face {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 300;
-  src: local("Roboto Light"), local("Roboto-Light"),
-    url("fonts/roboto-v20-latin-300.woff2") format("woff2"),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url("fonts/roboto-v20-latin-300.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+	font-family: "Roboto";
+	font-style: normal;
+	font-weight: 300;
+	src: local("Roboto Light"), local("Roboto-Light"),
+		url("fonts/roboto-v20-latin-300.woff2") format("woff2");
 }
 /* roboto-regular - latin */
 @font-face {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 400;
-  src: local("Roboto"), local("Roboto-Regular"),
-    url("fonts/roboto-v20-latin-regular.woff2") format("woff2"),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url("fonts/roboto-v20-latin-regular.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+	font-family: "Roboto";
+	font-style: normal;
+	font-weight: 400;
+	src: local("Roboto"), local("Roboto-Regular"),
+		url("fonts/roboto-v20-latin-regular.woff2") format("woff2");
 }
 /* roboto-500 - latin */
 @font-face {
-  font-family: "Roboto";
-  font-style: normal;
-  font-weight: 500;
-  src: local("Roboto Medium"), local("Roboto-Medium"),
-    url("fonts/roboto-v20-latin-500.woff2") format("woff2"),
-    /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url("fonts/roboto-v20-latin-500.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+	font-family: "Roboto";
+	font-style: normal;
+	font-weight: 500;
+	src: local("Roboto Medium"), local("Roboto-Medium"),
+		url("fonts/roboto-v20-latin-500.woff2") format("woff2");
+}
+
+/* poppins-regular - latin */
+@font-face {
+	font-family: "Poppins";
+	font-style: normal;
+	font-weight: 400;
+	src: local("Poppins Regular"), local("Poppins-Regular"),
+		url("fonts/poppins-v9-latin-regular.woff2") format("woff2");
+}
+/* poppins-500 - latin */
+@font-face {
+	font-family: "Poppins";
+	font-style: normal;
+	font-weight: 500;
+	src: local("Poppins Medium"), local("Poppins-Medium"),
+		url("fonts/poppins-v9-latin-500.woff2") format("woff2");
 }
 
 body {
-  --mdc-theme-primary: #3f51b5;
-  --mdc-theme-secondary: #f44336;
-  font-family: Roboto, sans-serif;
-  background-color: black;
+	--mdc-theme-primary: #3f51b5;
+	--mdc-theme-secondary: #f44336;
+	font-family: Roboto, sans-serif;
+	background-color: black;
 }
 
 .opts {
-  display: block !important;
-  margin: 16px;
-  padding: 16px;
-  position: absolute;
-  top: 0;
-  left: 0;
+	display: block !important;
+	margin: 16px;
+	padding: 16px;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 .opts__playback {
-  margin-left: auto;
-  margin-right: auto;
-  display: table;
+	margin-left: auto;
+	margin-right: auto;
+	display: table;
 }
 
 .opts__sel {
-  display: none;
+	display: none;
 }
 
 .opts__name {
-  width: 100%;
+	width: 100%;
 }
