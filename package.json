@@ -33,6 +33,7 @@
     "jquery": "^3.5.1",
     "material-components-web": "^4.0.0",
     "normalize.css": "^8.0.1",
+    "pify": "^5.0.0",
     "subtitle": "^2.0.3",
     "update-electron-app": "^1.5.0"
   },

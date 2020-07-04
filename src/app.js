@@ -7,6 +7,7 @@ const mdc = require("material-components-web")
 const { promises: fs } = require("fs")
 const Observable = require("es6-observable")
 const isObjectEqual = require("fast-deep-equal/es6")
+const pify = require("pify")
 
 const eachFrame = require("./utils/each-frame")
 const parseSrt = require("./utils/parse-srt")
@@ -19,6 +20,8 @@ window.addEventListener("load", async () => {
 	mdc.autoInit()
 
 	require("./fabric")
+
+	const imageFromUrl = pify(fabric.Image.fromURL, { errorFirst: false }).bind(fabric.Image.fromURL)
 
 	// User-provided options
 	const options_ = {
@@ -107,12 +110,12 @@ window.addEventListener("load", async () => {
 		canvas.backgroundColor = "black"
 
 		// Image
-		fabric.Image.fromURL(options_.image, img => {
-			img.scaleToWidth(canvas.width / 5) // 256px (720p)
-			img.left = canvas.width / 10 // 128px
-			canvas.add(img)
-			img.centerV()
-		})
+		const albumImage = await imageFromUrl(options_.image)
+
+		albumImage.scaleToWidth(canvas.width / 5) // 256px (720p)
+		albumImage.left = canvas.width / 10 // 128px
+		canvas.add(albumImage)
+		albumImage.centerV()
 
 		// Progress bar background
 		canvas.add(new fabric.Rect({
@@ -260,7 +263,6 @@ window.addEventListener("load", async () => {
 
 				// Add subtitles
 				subs[1].animate("opacity", "1", animationOptions)
-
 				subs[2].animate("opacity", "0.8", animationOptions)
 			} else {
 				// Revert previous stub
