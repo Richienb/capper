@@ -9,6 +9,8 @@ const Observable = require("es6-observable")
 const isObjectEqual = require("fast-deep-equal/es6")
 const pify = require("pify")
 
+electron.getCurrentWindow().removeAllListeners();
+
 const eachFrame = require("./utils/each-frame")
 const parseSrt = require("./utils/parse-srt")
 
@@ -21,7 +23,19 @@ window.addEventListener("load", async () => {
 
 	require("./fabric")
 
+	fabric.Object.prototype.set({
+		strokeWidth: 0
+	});
+
 	const imageFromUrl = pify(fabric.Image.fromURL, { errorFirst: false }).bind(fabric.Image.fromURL)
+	const roundedCorners = (fabricObject, cornerRadius) => new fabric.Rect({
+		width: fabricObject.width,
+		height: fabricObject.height,
+		rx: cornerRadius / fabricObject.scaleX,
+		ry: cornerRadius / fabricObject.scaleY,
+		left: -fabricObject.width / 2,
+		top: -fabricObject.height / 2
+	})
 
 	// User-provided options
 	const options_ = {
@@ -118,9 +132,12 @@ window.addEventListener("load", async () => {
 		const albumImage = await imageFromUrl(options_.image)
 
 		albumImage.scaleToWidth(canvas.width / 5) // 256px (720p)
-		albumImage.left = canvas.width / 10 // 128px
 		canvas.add(albumImage)
 		albumImage.centerV()
+		albumImage.set({
+			left: canvas.width / 10, // 128px
+			clipPath: roundedCorners(albumImage, 8)
+		})
 
 		// Progress bar background
 		canvas.add(new fabric.Rect({
@@ -284,7 +301,8 @@ window.addEventListener("load", async () => {
 				newAlbumImage.set({
 					top: 0,
 					left: 32,
-					opacity: 0
+					opacity: 0,
+					clipPath: roundedCorners(albumImage, 16)
 				})
 				newAlbumImage.scaleToWidth(64)
 				newAlbumImage.animate("opacity", 1, titleAnimationOptions)
