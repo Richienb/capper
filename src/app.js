@@ -9,10 +9,11 @@ const Observable = require("es6-observable")
 const isObjectEqual = require("fast-deep-equal/es6")
 const pify = require("pify")
 
-electron.getCurrentWindow().removeAllListeners();
-
 const eachFrame = require("./utils/each-frame")
 const parseSrt = require("./utils/parse-srt")
+const webmToMp4 = require("./utils/webm-to-mp4")
+
+electron.getCurrentWindow().removeAllListeners();
 
 const calculateWidth = resolution => resolution / 9 * 16
 
@@ -397,18 +398,18 @@ window.addEventListener("load", async () => {
 			const { filePath: filename } = await electron.dialog.showSaveDialog(electron.getCurrentWindow(), {
 				title: "Choose save location",
 
-				defaultPath: path.join(electron.app.getPath("videos"), `${options_.name}.webm`),
+				defaultPath: path.join(electron.app.getPath("videos"), `${options_.name}.mp4`),
 
 				buttonLabel: "Save",
 
 				filters: [
-					{ name: "WebM Videos", extensions: ["webm"] },
+					{ name: "Mp4 Videos", extensions: ["mp4"] },
 					{ name: "All Files", extensions: ["*"] }
 				]
 			})
 
 			// Save the blob to a file
-			await fs.writeFile(filename, Buffer.from(await superBuffer.arrayBuffer()))
+			await fs.writeFile(filename, Buffer.from(webmToMp4(Buffer.from(await superBuffer.arrayBuffer()))))
 
 			// Re-enable settings
 			$(".options button").prop("disabled", false)
