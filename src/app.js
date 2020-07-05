@@ -13,7 +13,7 @@ const eachFrame = require("./utils/each-frame")
 const parseSrt = require("./utils/parse-srt")
 const webmToMp4 = require("./utils/webm-to-mp4")
 
-electron.getCurrentWindow().removeAllListeners();
+electron.getCurrentWindow().removeAllListeners()
 
 const calculateWidth = resolution => resolution / 9 * 16
 
@@ -26,7 +26,7 @@ window.addEventListener("load", async () => {
 
 	fabric.Object.prototype.set({
 		strokeWidth: 0
-	});
+	})
 
 	const imageFromUrl = pify(fabric.Image.fromURL, { errorFirst: false }).bind(fabric.Image.fromURL)
 	const roundedCorners = (fabricObject, cornerRadius) => new fabric.Rect({
@@ -257,72 +257,7 @@ window.addEventListener("load", async () => {
 			stubs[subtitleIndex].animate("height", stubHeight * 1.5, animationOptions)
 			stubs[subtitleIndex].animate("top", canvas.height - rem(2.35), animationOptions)
 
-			// Fade out the title when the current subtitle starts
-			if (!previousSubtitle) {
-				title.forEach(object => object.animate("opacity", "0", animationOptions))
-
-				// Current subtitle
-				subs[1] = new fabric.Text(currentSubtitle, {
-					fontFamily: fontFamily.medium,
-					fill: "white",
-					fontSize: rem(3),
-					opacity: 0
-				})
-				canvas.add(subs[1])
-				subs[1].centerV()
-				subs[1].centerH()
-
-				// Next subtitle
-				subs[2] = new fabric.Text(nextSubtitle, {
-					fontFamily: fontFamily.normal,
-					fill: "white",
-					fontSize: rem(3),
-					opacity: 0
-				})
-				canvas.add(subs[2])
-				subs[2].centerV()
-				subs[2].centerH()
-				subs[2].set("top", subs[2].get("top") + subSpacing)
-
-				// Add subtitles
-				subs[1].animate("opacity", "1", animationOptions)
-				subs[2].animate("opacity", "0.8", animationOptions)
-
-				albumImage.animate("top", albumImage.top - rem(2), animationOptions)
-				albumImage.animate("opacity", 0, animationOptions)
-
-				const titleAnimationOptions = {
-					duration: 500,
-					...animationOptions
-				}
-
-				const newAlbumImage = fabric.util.object.clone(albumImage)
-
-				canvas.add(newAlbumImage)
-				newAlbumImage.set({
-					top: 0,
-					left: 32,
-					opacity: 0,
-					clipPath: roundedCorners(albumImage, 16)
-				})
-				newAlbumImage.scaleToWidth(64)
-				newAlbumImage.animate("opacity", 1, titleAnimationOptions)
-				newAlbumImage.animate("top", 32, titleAnimationOptions)
-
-				const newAlbumText = new fabric.Text(options_.name, {
-					fontFamily: fontFamily.normal,
-					fill: "white",
-					fontSize: rem(2),
-					left: 112,
-					top: 0,
-					opacity: 0
-				})
-
-				canvas.add(newAlbumText)
-
-				newAlbumText.animate("opacity", 1, titleAnimationOptions)
-				newAlbumText.animate("top", 32, titleAnimationOptions)
-			} else {
+			if (previousSubtitle) {
 				// Revert previous stub
 				stubs[subtitleIndex - 1].animate("opacity", 0.8, animationOptions)
 				stubs[subtitleIndex - 1].animate("height", stubHeight, animationOptions)
@@ -362,6 +297,72 @@ window.addEventListener("load", async () => {
 					subs[2].animate("opacity", "0.8", animationOptions)
 					subs[2].animate("top", `-=${subSpacing}`, animationOptions)
 				}
+			} else {
+				// Fade out the title when the first subtitle starts
+
+				title.forEach(object => object.animate("opacity", "0", animationOptions))
+
+				// Current subtitle
+				subs[1] = new fabric.Text(currentSubtitle, {
+					fontFamily: fontFamily.medium,
+					fill: "white",
+					fontSize: rem(3),
+					opacity: 0
+				})
+				canvas.add(subs[1])
+				subs[1].centerV()
+				subs[1].centerH()
+
+				// Next subtitle
+				subs[2] = new fabric.Text(nextSubtitle, {
+					fontFamily: fontFamily.normal,
+					fill: "white",
+					fontSize: rem(3),
+					opacity: 0
+				})
+				canvas.add(subs[2])
+				subs[2].centerV()
+				subs[2].centerH()
+				subs[2].set("top", subs[2].get("top") + subSpacing)
+
+				// Add subtitles
+				subs[1].animate("opacity", "1", animationOptions)
+				subs[2].animate("opacity", "0.8", animationOptions)
+
+				// Transition out prominent album cover image
+				albumImage.animate("top", albumImage.top - rem(2), animationOptions)
+				albumImage.animate("opacity", 0, animationOptions)
+
+				const titleAnimationOptions = {
+					duration: 500,
+					...animationOptions
+				}
+
+				// Smaller album cover image to be displayed in the top-left.
+				const newAlbumImage = fabric.util.object.clone(albumImage)
+				canvas.add(newAlbumImage)
+				newAlbumImage.set({
+					top: 0,
+					left: 32,
+					opacity: 0,
+					clipPath: roundedCorners(albumImage, 16)
+				})
+				newAlbumImage.scaleToWidth(64)
+				newAlbumImage.animate("opacity", 1, titleAnimationOptions)
+				newAlbumImage.animate("top", 32, titleAnimationOptions)
+
+				// Smaller song name text to be displayed in the top-left.
+				const newSongNameText = new fabric.Text(options_.name, {
+					fontFamily: fontFamily.normal,
+					fill: "white",
+					fontSize: rem(2),
+					left: 112,
+					top: 0,
+					opacity: 0
+				})
+				canvas.add(newSongNameText)
+				newSongNameText.animate("opacity", 1, titleAnimationOptions)
+				newSongNameText.animate("top", 32, titleAnimationOptions)
 			}
 
 			// Re-render all dirty objects
