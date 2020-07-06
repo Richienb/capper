@@ -428,7 +428,7 @@ window.addEventListener("load", async () => {
 	}
 
 	const toggleSettingsEnabled = isEnabled => {
-		const isDisabled = isEnabled
+		const isDisabled = !isEnabled
 		$(".options button").prop("disabled", isDisabled)
 		$(".options__name").get(0).MDCTextField.disabled = isDisabled
 		$(".options__artist").get(0).MDCTextField.disabled = isDisabled
