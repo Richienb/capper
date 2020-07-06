@@ -203,6 +203,22 @@ window.addEventListener("load", async () => {
 		]
 		title.forEach(object => canvas.add(object))
 
+		let fadingOut = false
+		audio.addEventListener("timeupdate", () => {
+			// When 2 seconds are remaining in the audio
+			if (Math.floor(audio.duration - audio.currentTime) === 2 && !fadingOut) {
+				fadingOut = true
+
+				// Fade out all elements
+				canvas.getObjects().forEach(fabricObject => {
+					fabricObject.animate("opacity", 0, {
+						...animationOptions,
+						duration: 2000
+					})
+				})
+			}
+		})
+
 		// For each fire of requestAnimationFrame
 		eachFrame.subscribe(() => {
 			// Update the width of the progress bar foreground
