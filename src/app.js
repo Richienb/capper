@@ -391,7 +391,7 @@ window.addEventListener("load", async () => {
 		mediaRecorder.start()
 
 		// When recording is stopped
-		mediaRecorder.onstop = async () => {
+		mediaRecorder.addEventListener("stop", async () => {
 			// Create blob of video file
 			const superBuffer = new Blob(recordedBlobs, { type: options.mimeType })
 
@@ -415,16 +415,16 @@ window.addEventListener("load", async () => {
 			// Re-enable settings
 			$(".options button").prop("disabled", false)
 			$(".options__name").get(0).MDCTextField.disabled = false
-		}
+		})
 
 		// When data enabled
-		mediaRecorder.ondataavailable = ({ data }) => {
+		mediaRecorder.addEventListener("dataavailable", ({ data }) => {
 			// If data exists
 			if (data && data.size > 0) {
 				// Push the data to an array
 				recordedBlobs.push(data)
 			}
-		}
+		})
 
 		// When the audio ends
 		audio.addEventListener("ended", () => {
