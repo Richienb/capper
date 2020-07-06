@@ -50,7 +50,8 @@ window.addEventListener("load", async () => {
 		image: undefined,
 		audio: undefined,
 		subtitles: undefined,
-		name: undefined
+		name: undefined,
+		artist: undefined
 	}
 
 	const fontFamily = {
@@ -108,6 +109,12 @@ window.addEventListener("load", async () => {
 	// Text input for name
 	$(".options__name").get(0).MDCTextField.listen("input", () => {
 		options_.name = $(".options__name").get(0).MDCTextField.value
+		toggleButtonEnabled()
+	})
+
+	// Text input for artist
+	$(".options__artist").get(0).MDCTextField.listen("input", () => {
+		options_.artist = $(".options__artist").get(0).MDCTextField.value
 		toggleButtonEnabled()
 	})
 
@@ -401,6 +408,21 @@ window.addEventListener("load", async () => {
 				canvas.add(newSongNameText)
 				newSongNameText.animate("opacity", 1, titleAnimationOptions)
 				newSongNameText.animate("top", 32, titleAnimationOptions)
+
+				// Small artist name text to be displayed in the top-left.
+				if (options_.artist) {
+					const artistNameText = new fabric.Text(options_.artist, {
+						fontFamily: fontFamily.normal,
+						fill: "white",
+						fontSize: rem(1.25),
+						left: 113,
+						top: 32,
+						opacity: 0
+					})
+					canvas.add(artistNameText)
+					artistNameText.animate("opacity", 1, titleAnimationOptions)
+					artistNameText.animate("top", 68, titleAnimationOptions)
+				}
 			}
 		})
 	}
