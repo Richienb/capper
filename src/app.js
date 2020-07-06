@@ -298,10 +298,6 @@ window.addEventListener("load", async () => {
 					subs[2].animate("top", `-=${subSpacing}`, animationOptions)
 				}
 			} else {
-				// Fade out the title when the first subtitle starts
-
-				title.forEach(object => object.animate("opacity", "0", animationOptions))
-
 				// Current subtitle
 				subs[1] = new fabric.Text(currentSubtitle, {
 					fontFamily: fontFamily.medium,
@@ -329,27 +325,31 @@ window.addEventListener("load", async () => {
 				subs[1].animate("opacity", "1", animationOptions)
 				subs[2].animate("opacity", "0.8", animationOptions)
 
-				// Transition out prominent album cover image
-				albumImage.animate("top", albumImage.top - rem(2), animationOptions)
-				albumImage.animate("opacity", 0, animationOptions)
-
 				const titleAnimationOptions = {
 					duration: 500,
 					...animationOptions
 				}
 
+				// Transition out the prominent album cover image
+				albumImage.animate("top", albumImage.top - rem(2), titleAnimationOptions)
+				albumImage.animate("opacity", 0, titleAnimationOptions)
+
+				// Fade out the title when the first subtitle starts
+				title.forEach(object => object.animate("opacity", "0", titleAnimationOptions))
+
 				// Smaller album cover image to be displayed in the top-left.
-				const newAlbumImage = fabric.util.object.clone(albumImage)
-				canvas.add(newAlbumImage)
-				newAlbumImage.set({
-					top: 0,
-					left: 32,
-					opacity: 0,
-					clipPath: roundedCorners(albumImage, 16)
+				albumImage.clone(newAlbumImage => {
+					newAlbumImage.set({
+						top: 0,
+						left: 32,
+						opacity: 0,
+						clipPath: roundedCorners(albumImage, 16)
+					})
+					newAlbumImage.scaleToWidth(64)
+					canvas.add(newAlbumImage)
+					newAlbumImage.animate("opacity", 1, titleAnimationOptions)
+					newAlbumImage.animate("top", 32, titleAnimationOptions)
 				})
-				newAlbumImage.scaleToWidth(64)
-				newAlbumImage.animate("opacity", 1, titleAnimationOptions)
-				newAlbumImage.animate("top", 32, titleAnimationOptions)
 
 				// Smaller song name text to be displayed in the top-left.
 				const newSongNameText = new fabric.Text(options_.name, {
