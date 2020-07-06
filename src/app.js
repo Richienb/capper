@@ -427,10 +427,16 @@ window.addEventListener("load", async () => {
 		})
 	}
 
+	const toggleSettingsEnabled = isEnabled => {
+		const isDisabled = isEnabled
+		$(".options button").prop("disabled", isDisabled)
+		$(".options__name").get(0).MDCTextField.disabled = isDisabled
+		$(".options__artist").get(0).MDCTextField.disabled = isDisabled
+	}
+
 	async function record() {
 		// Disable settings
-		$(".options button").prop("disabled", true)
-		$(".options__name").get(0).MDCTextField.disabled = true
+		toggleSettingsEnabled(false)
 
 		// Configure options
 		const options = { mimeType: options_.format }
@@ -440,7 +446,7 @@ window.addEventListener("load", async () => {
 		await play()
 
 		// Prepare recorder
-		const sources = [audio.captureStream(), document.querySelector("canvas").captureStream()]
+		const sources = [audio.captureStream(), document.querySelector(".renderer").captureStream()]
 		const streams = new MediaStream([...sources[1].getVideoTracks(), ...sources[0].getAudioTracks()])
 		const mediaRecorder = new MediaRecorder(streams, options)
 
@@ -470,8 +476,7 @@ window.addEventListener("load", async () => {
 			await fs.writeFile(filename, Buffer.from(webmToMp4(Buffer.from(await superBuffer.arrayBuffer()))))
 
 			// Re-enable settings
-			$(".options button").prop("disabled", false)
-			$(".options__name").get(0).MDCTextField.disabled = false
+			toggleSettingsEnabled(true)
 		})
 
 		// When data enabled
