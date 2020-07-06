@@ -17,6 +17,9 @@ electron.getCurrentWindow().removeAllListeners()
 
 const calculateWidth = resolution => resolution / 9 * 16
 
+// Get package version
+const version = electron.app.getVersion()
+
 window.addEventListener("load", async () => {
 	const $ = require("jquery")
 
@@ -106,9 +109,6 @@ window.addEventListener("load", async () => {
 	// Audio object
 	const audio = new Audio()
 
-	// Get package version
-	const version = electron.app.getVersion()
-
 	// `rem` support
 	const rem = (rem, fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)) => rem * fontSize
 
@@ -118,7 +118,6 @@ window.addEventListener("load", async () => {
 	// Common options for animation
 	const animationOptions = {
 		duration: 200,
-		onChange: canvas.renderAll.bind(canvas),
 		easing: fabric.util.ease.easeInOutCubic
 	}
 
@@ -380,9 +379,6 @@ window.addEventListener("load", async () => {
 				newSongNameText.animate("opacity", 1, titleAnimationOptions)
 				newSongNameText.animate("top", 32, titleAnimationOptions)
 			}
-
-			// Re-render all dirty objects
-			canvas.renderAll()
 		})
 	}
 
