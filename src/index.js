@@ -4,8 +4,9 @@ const Sentry = require("@sentry/electron")
 Sentry.init({ dsn: "https://be5edffe19ef4496b415f7f07eecab65@sentry.io/1866073" })
 
 try {
-	require("electron-reloader")(module);
+	require("electron-reloader")(module) // eslint-disable-line node/no-unpublished-require
 } catch (_) { }
+
 require("electron-debug")()
 require("update-electron-app")()
 
@@ -20,8 +21,7 @@ if (require("electron-squirrel-startup")) {
 // Keep a global reference of the window to prevent garbage collection
 let mainWindow
 
-// When initialisation has finished
-app.on("ready", () => {
+function createWindow() {
 	// Create the browser window
 	mainWindow = new BrowserWindow({
 		show: false,
@@ -63,7 +63,10 @@ app.on("ready", () => {
 		// when you should delete the corresponding element.
 		mainWindow = null
 	})
-})
+}
+
+// When initialisation has finished
+app.on("ready", createWindow)
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {

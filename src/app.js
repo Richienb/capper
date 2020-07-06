@@ -151,7 +151,7 @@ window.addEventListener("load", async () => {
 		canvas.renderAll()
 
 		// Render the canvas
-		viewable.getContext("2d").drawImage(renderer, 0, 0, renderer.width, renderer.height, 0, 0, viewable.width, viewable.height);
+		viewable.getContext("2d").drawImage(renderer, 0, 0, renderer.width, renderer.height, 0, 0, viewable.width, viewable.height)
 	})
 
 	async function play() {
@@ -440,7 +440,7 @@ window.addEventListener("load", async () => {
 		await play()
 
 		// Prepare recorder
-		const sources = [audio.captureStream(), document.queryselectector("canvas").captureStream()]
+		const sources = [audio.captureStream(), document.querySelector("canvas").captureStream()]
 		const streams = new MediaStream([...sources[1].getVideoTracks(), ...sources[0].getAudioTracks()])
 		const mediaRecorder = new MediaRecorder(streams, options)
 
