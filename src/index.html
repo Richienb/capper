@@ -11,55 +11,70 @@
 </head>
 
 <body>
-	<div class="options mdc-card">
-		<input class="options__audio-sel options__sel" type="file" accept="audio/*">
-		<input class="options__image-sel options__sel" type="file" accept="image/*">
-		<input class="options__subtitles-sel options__sel" type="file" accept=".vtt,.srt">
+	<div class="options">
+		<input class="options__audio-select options__select" type="file" accept="audio/*">
+		<input class="options__image-select options__select" type="file" accept="image/*">
+		<input class="options__subtitles-select options__select" type="file" accept=".vtt,.srt">
 		<div class="options__setup">
-			<label class="options__name mdc-text-field" data-mdc-auto-init="MDCTextField">
-				<input type="text" id="my-text-field" class="mdc-text-field__input">
-				<span class="mdc-floating-label">Song Name</span>
-				<div class="mdc-line-ripple"></div>
+			<label class="options__name mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
+				<span class="mdc-text-field__ripple"></span>
+				<input class="mdc-text-field__input" type="text" aria-labelledby="options__name-label">
+				<span class="mdc-floating-label" id="options__name-label">Song Name</span>
+				<span class="mdc-line-ripple"></span>
 			</label>
-			<br>
-			<br>
-			<button class="options__audio mdc-button" data-mdc-auto-init="MDCRipple"><span class="mdc-button__ripple"></span>
-				<svg class="mdc-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+			<button class="options__audio mdc-button" data-mdc-auto-init="MDCRipple">
+				<div class="mdc-button__ripple"></div>
+				<svg class="mdc-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+					viewBox="0 0 24 24">
 					<path fill="none" d="M0 0h24v24H0V0z" />
 					<path
 						d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6zm-2 16c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
-				</svg><span class="mdc-button__label">Audio</span></button>
-			<button class="options__image mdc-button" data-mdc-auto-init="MDCRipple"><span class="mdc-button__ripple"></span>
-				<svg class="mdc-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+				</svg>
+				<span class="mdc-button__label">Audio</span>
+			</button>
+			<button class="options__image mdc-button" data-mdc-auto-init="MDCRipple">
+				<div class="mdc-button__ripple"></div>
+				<svg class="mdc-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+					viewBox="0 0 24 24">
 					<path fill="none" d="M0 0h24v24H0V0z" />
 					<path
 						d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z" />
-				</svg><span class="mdc-button__label">Image</span></button>
-			<button class="options__subtitles mdc-button" data-mdc-auto-init="MDCRipple"><span
-					class="mdc-button__ripple"></span>
-				<svg class="mdc-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+				</svg>
+				<span class="mdc-button__label">Image</span>
+			</button>
+			<button class="options__subtitles mdc-button" data-mdc-auto-init="MDCRipple">
+				<div class="mdc-button__ripple"></div>
+				<svg class="mdc-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+					viewBox="0 0 24 24">
 					<path fill="none" d="M0 0h24v24H0V0z" />
 					<path
 						d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h8v2H6zm10 0h2v2h-2zm-6-4h8v2h-8z" />
-				</svg><span class="mdc-button__label">Subtitles</span></button>
-		</div>
-		<br>
-		<div class="options__playback">
-			<button class="options__play mdc-button" data-mdc-auto-init="MDCRipple" disabled><span
-					class="mdc-button__ripple"></span>
-				<svg class="mdc-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+				</svg>
+				<span class="mdc-button__label">Subtitles</span>
+			</button>
+			<button class="options__play mdc-button" data-mdc-auto-init="MDCRipple" disabled>
+				<div class="mdc-button__ripple"></div>
+				<svg class="mdc-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+					viewBox="0 0 24 24">
 					<path fill="none" d="M0 0h24v24H0V0z" />
 					<path d="M10 8.64L15.27 12 10 15.36V8.64M8 5v14l11-7L8 5z" />
-				</svg><span class="mdc-button__label">Play</span></button>
-			<button class="options__record mdc-button" data-mdc-auto-init="MDCRipple" disabled><span
-					class="mdc-button__ripple"></span>
-				<svg class="mdc-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-					<path d="M19,12C19,15.86 15.86,19 12,19C8.14,19 5,15.86 5,12C5,8.14 8.14,5 12,5C15.86,5 19,8.14 19,12Z" />
-				</svg><span class="mdc-button__label">Record</span></button>
+				</svg>
+				<span class="mdc-button__label">Play</span>
+			</button>
+			<button class="options__record mdc-button" data-mdc-auto-init="MDCRipple" disabled>
+				<div class="mdc-button__ripple"></div>
+				<svg class="mdc-button__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+					viewBox="0 0 24 24">
+					<path
+						d="M19,12C19,15.86 15.86,19 12,19C8.14,19 5,15.86 5,12C5,8.14 8.14,5 12,5C15.86,5 19,8.14 19,12Z" />
+				</svg>
+				<span class="mdc-button__label">Record</span>
+			</button>
 		</div>
 	</div>
 
-	<canvas></canvas>
+	<canvas class="viewable"></canvas>
+	<canvas class="renderer"></canvas>
 </body>
 
 </html>

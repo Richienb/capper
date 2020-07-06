@@ -16,6 +16,7 @@ const webmToMp4 = require("./utils/webm-to-mp4")
 electron.getCurrentWindow().removeAllListeners()
 
 const calculateWidth = resolution => resolution / 9 * 16
+const calculateHeight = resolution => resolution * 9 / 16
 
 // Get package version
 const version = electron.app.getVersion()
@@ -58,19 +59,33 @@ window.addEventListener("load", async () => {
 	}
 
 	// Set canvas size
-	$("canvas").attr({
+	$(".renderer").attr({
 		height: 1080,
 		width: calculateWidth(options_.resolution)
+	})
+	$(".viewable").attr({
+		height: calculateHeight(window.innerWidth),
+		width: window.innerWidth
+	})
+
+	$(window).on("resize", () => {
+		$(".viewable").attr({
+			height: calculateHeight(window.innerWidth),
+			width: window.innerWidth
+		})
 	})
 
 	// Handle file inputs
 	function fileInput(name) {
 		const element = `.options__${name}`
-		$(element).on("click", () => $(`${element}-sel`).click())
-		$(`${element}-sel`).on("change", () => {
-			options_[name] = $(`${element}-sel`).get(0).files[0].path
+		$(element).on("click", () => $(`${element}-select`).click())
+		$(`${element}-select`).on("change", () => {
+			const file = $(`${element}-select`).get(0).files[0]
+			if (file) {
+				options_[name] = file.path
 
-			toggleButtonEnabled()
+				toggleButtonEnabled()
+			}
 		})
 	}
 
@@ -113,13 +128,24 @@ window.addEventListener("load", async () => {
 	const rem = (rem, fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)) => rem * fontSize
 
 	// Fabric object
-	const canvas = new fabric.StaticCanvas(document.querySelector("canvas"), { backgroundColor: "black" })
+	const canvas = new fabric.StaticCanvas(document.querySelector(".renderer"), { backgroundColor: "black" })
 
 	// Common options for animation
 	const animationOptions = {
 		duration: 200,
 		easing: fabric.util.ease.easeInOutCubic
 	}
+
+	const renderer = document.querySelector(".renderer")
+	const viewable = document.querySelector(".viewable")
+
+	eachFrame.subscribe(() => {
+		// Re-render all dirty objects
+		canvas.renderAll()
+
+		// Render the canvas
+		viewable.getContext("2d").drawImage(renderer, 0, 0, renderer.width, renderer.height, 0, 0, viewable.width, viewable.height);
+	})
 
 	async function play() {
 		// Clear the canvas
@@ -222,9 +248,6 @@ window.addEventListener("load", async () => {
 		eachFrame.subscribe(() => {
 			// Update the width of the progress bar foreground
 			progress.set("width", audio.currentTime / audio.duration * (canvas.width - rem(3)))
-
-			// Re-render all dirty objects
-			canvas.renderAll()
 		})
 
 		// Spacing between subtitles
@@ -395,7 +418,7 @@ window.addEventListener("load", async () => {
 		await play()
 
 		// Prepare recorder
-		const sources = [audio.captureStream(), document.querySelector("canvas").captureStream()]
+		const sources = [audio.captureStream(), document.queryselectector("canvas").captureStream()]
 		const streams = new MediaStream([...sources[1].getVideoTracks(), ...sources[0].getAudioTracks()])
 		const mediaRecorder = new MediaRecorder(streams, options)
 

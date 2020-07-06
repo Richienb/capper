@@ -3,6 +3,10 @@ const { app, BrowserWindow } = require("electron")
 const Sentry = require("@sentry/electron")
 Sentry.init({ dsn: "https://be5edffe19ef4496b415f7f07eecab65@sentry.io/1866073" })
 
+try {
+	require("electron-reloader")(module);
+} catch (_) { }
+require("electron-debug")()
 require("update-electron-app")()
 
 // Bypass Chrome autoplay policy
@@ -16,13 +20,15 @@ if (require("electron-squirrel-startup")) {
 // Keep a global reference of the window to prevent garbage collection
 let mainWindow
 
-const createWindow = () => {
+// When initialisation has finished
+app.on("ready", () => {
 	// Create the browser window
 	mainWindow = new BrowserWindow({
 		show: false,
 		webPreferences: {
 			nodeIntegration: false,
 			nodeIntegrationInWorker: false,
+			enableRemoteModule: true,
 			preload: path.join(__dirname, "app.js"),
 			defaultFontFamily: {
 				standard: "Roboto",
@@ -42,7 +48,7 @@ const createWindow = () => {
 	mainWindow.loadURL(`file://${__dirname}/index.html`) // eslint-disable-line node/no-path-concat
 
 	// Open DevTools
-	mainWindow.webContents.openDevTools()
+	// mainWindow.webContents.openDevTools()
 
 	// When the dom has finished loading
 	mainWindow.webContents.once("dom-ready", () => {
@@ -57,13 +63,6 @@ const createWindow = () => {
 		// when you should delete the corresponding element.
 		mainWindow = null
 	})
-}
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on("ready", () => {
-	createWindow()
 })
 
 // Quit when all windows are closed.
