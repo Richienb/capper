@@ -342,8 +342,8 @@ window.addEventListener("load", async () => {
 				subs[2].animate("opacity", "0.8", animationOptions)
 
 				const titleAnimationOptions = {
-					duration: 500,
-					...animationOptions
+					...animationOptions,
+					duration: 500
 				}
 
 				// Transition out the prominent album cover image
