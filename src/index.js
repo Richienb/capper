@@ -5,6 +5,7 @@ Sentry.init({ dsn: "https://be5edffe19ef4496b415f7f07eecab65@sentry.io/1866073" 
 
 require("update-electron-app")()
 
+// Bypass Chrome autoplay policy
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required")
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -12,15 +13,13 @@ if (require("electron-squirrel-startup")) {
 	app.quit()
 }
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
+// Keep a global reference of the window to prevent garbage collection
 let mainWindow
 
 const createWindow = () => {
-	// Create the browser window.
+	// Create the browser window
 	mainWindow = new BrowserWindow({
-		width: 800,
-		height: 600,
+		show: false,
 		webPreferences: {
 			nodeIntegration: false,
 			nodeIntegrationInWorker: false,
@@ -33,14 +32,23 @@ const createWindow = () => {
 		}
 	})
 
-	// Remove menu bar
+	// Remove the menu bar
 	mainWindow.removeMenu()
+
+	// Maximize the window
+	mainWindow.maximize()
 
 	// And load the index.html of the app.
 	mainWindow.loadURL(`file://${__dirname}/index.html`) // eslint-disable-line node/no-path-concat
 
-	// Open the DevTools.
+	// Open DevTools
 	mainWindow.webContents.openDevTools()
+
+	// When the dom has finished loading
+	mainWindow.webContents.once("dom-ready", () => {
+		// Show the window
+		mainWindow.show()
+	})
 
 	// Emitted when the window is closed.
 	mainWindow.on("closed", () => {
@@ -74,6 +82,3 @@ app.on("activate", () => {
 		createWindow()
 	}
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
