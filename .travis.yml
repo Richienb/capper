@@ -18,6 +18,8 @@ jobs:
         - stage: Deploy Windows binary
           if: tag IS present
           os: windows
+          before_install:
+              - export GRADLE_OPTS=-Dorg.gradle.daemon=false
           script:
               - yarn electron-forge publish
         - stage: Deploy MacOS binary
