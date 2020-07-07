@@ -31,6 +31,7 @@ function createWindow() {
 			nodeIntegration: false,
 			nodeIntegrationInWorker: false,
 			enableRemoteModule: true,
+			contextIsolation: true,
 			preload: path.join(__dirname, "app.js"),
 			defaultFontFamily: {
 				standard: "Roboto",
@@ -53,7 +54,7 @@ function createWindow() {
 	// mainWindow.webContents.openDevTools()
 
 	// When the dom has finished loading
-	mainWindow.webContents.once("dom-ready", () => {
+	mainWindow.webContents.once("ready-to-show", () => {
 		// Show the window
 		mainWindow.show()
 	})
