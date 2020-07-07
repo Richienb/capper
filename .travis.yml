@@ -1,0 +1,34 @@
+cache:
+    - npm
+    - yarn
+
+language: node_js
+
+node_js:
+    - lts/*
+
+install:
+    - yarn
+
+jobs:
+    include:
+        - stage: Test
+          script:
+              - yarn test
+        - stage: Deploy Windows binary
+          if: tag IS present
+          os: windows
+          script:
+              - yarn electron-forge publish
+        - stage: Deploy MacOS binary
+          if: tag IS present
+          os: osx
+          osx_image: xcode12
+          script:
+              - yarn electron-forge publish
+        - stage: Deploy Linux binary
+          if: tag IS present
+          os: linux
+          dist: bionic
+          script:
+              - yarn electron-forge publish
