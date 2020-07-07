@@ -24,6 +24,7 @@ let mainWindow
 function createWindow() {
 	// Create the browser window
 	mainWindow = new BrowserWindow({
+		title: "Capper",
 		icon: nativeImage.createFromPath(path.join(__dirname, "icon.png")),
 		show: false,
 		webPreferences: {
