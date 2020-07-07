@@ -37,9 +37,9 @@ jobs:
                   packages:
                       - dpkg
                       - fakeroot
-                      - rpmbuild
+                      - rpm
                       - flatpak-builder
-                      - eu-strip
+                      - elfutils
                       - snapcraft
           script:
               - yarn electron-forge publish
