@@ -9,8 +9,8 @@ const mdc = require("material-components-web")
 const pify = require("pify")
 const pEachSeries = require("p-each-series")
 const delay = require("delay")
+const { parse: parseSrt } = require("subtitle")
 const eachFrame = require("./utils/each-frame")
-const parseSrt = require("./utils/parse-srt")
 const webmToMp4 = require("./utils/webm-to-mp4")
 
 const calculateWidth = resolution => resolution / 9 * 16
@@ -202,7 +202,7 @@ window.addEventListener("load", async () => {
 		canvas.add(progress)
 
 		// Parse subtitle file
-		const subtitles = await parseSrt(options_.subtitles)
+		const subtitles = parseSrt(await fs.readFile(options_.subtitles, "utf8"))
 
 		// Play audio
 		audio.src = options_.audio
