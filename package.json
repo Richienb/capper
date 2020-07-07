@@ -1,6 +1,6 @@
 {
 	"name": "capper",
-	"productName": "capper",
+	"productName": "Capper",
 	"version": "0.2.0",
 	"private": true,
 	"description": "Generate lyric videos.",
@@ -42,11 +42,13 @@
 	"devDependencies": {
 		"@electron-forge/cli": "6.0.0-beta.52",
 		"@electron-forge/maker-deb": "6.0.0-beta.52",
+		"@electron-forge/maker-dmg": "^6.0.0-beta.52",
 		"@electron-forge/maker-flatpak": "^6.0.0-beta.52",
 		"@electron-forge/maker-rpm": "6.0.0-beta.52",
 		"@electron-forge/maker-snap": "^6.0.0-beta.52",
 		"@electron-forge/maker-squirrel": "6.0.0-beta.52",
 		"@electron-forge/publisher-github": "^6.0.0-beta.52",
+		"@electron-forge/publisher-snapcraft": "^6.0.0-beta.52",
 		"electron": "9.0.5",
 		"electron-reloader": "^1.0.1",
 		"eslint-config-richienb": "^0.4.2",
@@ -64,15 +66,22 @@
 				{
 					"name": "@electron-forge/maker-squirrel",
 					"config": {
-						"name": "Capper"
+						"name": "Capper",
+						"iconUrl": "src/icon.ico",
+						"setupIcon": "src/icon.ico"
 					}
 				},
 				{
 					"name": "@electron-forge/maker-deb",
 					"config": {
 						"options": {
+							"name": "capper",
+							"productName": "Capper",
 							"maintainer": "Richie Bendall",
-							"homepage": "https://richienb.github.io"
+							"homepage": "https://richienb.github.io",
+							"description": "Generate lyric videos.",
+							"icon": "src/icon.png",
+							"section": "graphics"
 						}
 					}
 				},
@@ -81,16 +90,37 @@
 					"config": {
 						"options": {
 							"maintainer": "Richie Bendall",
-							"homepage": "https://richienb.github.io"
+							"homepage": "https://richienb.github.io",
+							"categories": [
+								"AudioVideo",
+								"Graphics",
+								"Utility"
+							],
+							"description": "Generate lyric videos.",
+							"license": "MIT",
+							"name": "capper",
+							"productName": "Capper"
 						}
+					}
+				},
+				{
+					"name": "@electron-forge/maker-dmg",
+					"config": {
+						"name": "Capper",
+						"icon": "src/icon.icns"
 					}
 				},
 				{
 					"name": "@electron-forge/maker-flatpak",
 					"config": {
 						"options": {
+							"productName": "Capper",
+							"description": "Generate lyric videos.",
+							"icon": "src/icon.png",
 							"categories": [
-								"Video"
+								"AudioVideo",
+								"Graphics",
+								"Utility"
 							]
 						}
 					}
@@ -98,11 +128,13 @@
 				{
 					"name": "@electron-forge/maker-snap",
 					"config": {
+						"name": "capper",
+						"summary": "Generate lyric videos.",
 						"features": {
 							"audio": true,
 							"browserSandbox": true
 						},
-						"summary": "Generate lyric videos."
+						"grade": "stable"
 					}
 				}
 			],
@@ -113,8 +145,13 @@
 						"repository": {
 							"owner": "Richienb",
 							"name": "capper"
-						},
-						"prerelease": true
+						}
+					}
+				},
+				{
+					"name": "@electron-forge/publisher-snapcraft",
+					"config": {
+						"release": "stable"
 					}
 				}
 			]

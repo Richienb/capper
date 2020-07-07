@@ -34,3 +34,7 @@ jobs:
           dist: bionic
           script:
               - yarn electron-forge publish
+          deploy:
+              provider: snap
+              cleanup: false
+              edge: true
