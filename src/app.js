@@ -249,11 +249,10 @@ window.addEventListener("load", async () => {
 		]
 		title.forEach(object => canvas.add(object))
 
-		let fadingOut = false
-		audio.addEventListener("timeupdate", () => {
+		const timeChanged = () => {
 			// When 2 seconds are remaining in the audio
 			if (Math.floor(audio.duration - audio.currentTime) === 2 && !fadingOut) {
-				fadingOut = true
+				audio.removeEventListener("timeupdate", timeChanged)
 
 				// Fade out all elements
 				canvas.getObjects().forEach(fabricObject => {
@@ -263,7 +262,8 @@ window.addEventListener("load", async () => {
 					})
 				})
 			}
-		})
+		}
+		audio.addEventListener("timeupdate", timeChanged)
 
 		// Spacing between subtitles
 		const subSpacing = rem(5.5)
