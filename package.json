@@ -43,7 +43,6 @@
 		"@electron-forge/cli": "6.0.0-beta.52",
 		"@electron-forge/maker-deb": "6.0.0-beta.52",
 		"@electron-forge/maker-dmg": "^6.0.0-beta.52",
-		"@electron-forge/maker-flatpak": "^6.0.0-beta.52",
 		"@electron-forge/maker-rpm": "6.0.0-beta.52",
 		"@electron-forge/maker-snap": "^6.0.0-beta.52",
 		"@electron-forge/maker-squirrel": "6.0.0-beta.52",
@@ -108,21 +107,6 @@
 					"config": {
 						"name": "Capper",
 						"icon": "src/icon.icns"
-					}
-				},
-				{
-					"name": "@electron-forge/maker-flatpak",
-					"config": {
-						"options": {
-							"productName": "Capper",
-							"description": "Generate lyric videos.",
-							"icon": "src/icon.png",
-							"categories": [
-								"AudioVideo",
-								"Graphics",
-								"Utility"
-							]
-						}
 					}
 				},
 				{
