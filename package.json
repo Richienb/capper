@@ -2,7 +2,7 @@
 	"name": "capper",
 	"productName": "capper",
 	"version": "0.1.1",
-	"description": "Captions engine.",
+	"description": "Generate lyric videos.",
 	"repository": "https://github.com/Richienb/capper.git",
 	"author": "Richie Bendall <richiebendall@gmail.com>",
 	"license": "MIT",
@@ -106,7 +106,7 @@
 							"audio": true,
 							"browserSandbox": true
 						},
-						"summary": "Captions engine."
+						"summary": "Generate lyric videos."
 					}
 				}
 			],

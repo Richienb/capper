@@ -1,5 +1,5 @@
 # Capper
 
-Captions engine.
+Generate lyric videos.
 
 ![Capper demo](https://i.imgur.com/0CsayNH.png)

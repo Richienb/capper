@@ -1,5 +1,5 @@
 const path = require("path")
-const { app, BrowserWindow } = require("electron")
+const { app, BrowserWindow, nativeImage } = require("electron")
 const Sentry = require("@sentry/electron")
 Sentry.init({ dsn: "https://be5edffe19ef4496b415f7f07eecab65@sentry.io/1866073" })
 
@@ -24,6 +24,7 @@ let mainWindow
 function createWindow() {
 	// Create the browser window
 	mainWindow = new BrowserWindow({
+		icon: nativeImage.createFromPath(path.join(__dirname, "icon.png")),
 		show: false,
 		webPreferences: {
 			nodeIntegration: false,
