@@ -32,6 +32,15 @@ jobs:
           if: tag IS present
           os: linux
           dist: bionic
+          addons:
+              apt:
+                  packages:
+                      - dpkg
+                      - fakeroot
+                      - rpmbuild
+                      - flatpak-builder
+                      - eu-strip
+                      - snapcraft
           script:
               - yarn electron-forge publish
           deploy:

@@ -48,7 +48,6 @@
 		"@electron-forge/maker-snap": "^6.0.0-beta.52",
 		"@electron-forge/maker-squirrel": "6.0.0-beta.52",
 		"@electron-forge/publisher-github": "^6.0.0-beta.52",
-		"@electron-forge/publisher-snapcraft": "^6.0.0-beta.52",
 		"electron": "9.0.5",
 		"electron-reloader": "^1.0.1",
 		"eslint-config-richienb": "^0.4.2",
@@ -146,12 +145,6 @@
 							"owner": "Richienb",
 							"name": "capper"
 						}
-					}
-				},
-				{
-					"name": "@electron-forge/publisher-snapcraft",
-					"config": {
-						"release": "stable"
 					}
 				}
 			]
