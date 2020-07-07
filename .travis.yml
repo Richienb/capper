@@ -25,7 +25,7 @@ jobs:
               - YARN_GPG=no
           script:
               - yarn electron-forge publish
-        - # MacOSz
+        - # MacOS
           if: tag IS present
           os: osx
           osx_image: xcode12
