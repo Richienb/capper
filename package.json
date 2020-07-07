@@ -59,6 +59,7 @@
 	"config": {
 		"forge": {
 			"packagerConfig": {
+				"executableName": "capper",
 				"icon": "src/icon.icns"
 			},
 			"makers": [
