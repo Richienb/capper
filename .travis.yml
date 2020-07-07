@@ -18,7 +18,7 @@ jobs:
         - stage: Test
           script:
               - yarn test
-        - stage: Deployment # Windows
+        - stage: Deploy # Windows
           if: tag IS present
           os: windows
           before_install:
