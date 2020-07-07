@@ -251,7 +251,7 @@ window.addEventListener("load", async () => {
 
 		const timeChanged = () => {
 			// When 2 seconds are remaining in the audio
-			if (Math.floor(audio.duration - audio.currentTime) === 2 && !fadingOut) {
+			if (Math.floor(audio.duration - audio.currentTime) === 2) {
 				audio.removeEventListener("timeupdate", timeChanged)
 
 				// Fade out all elements
@@ -263,6 +263,7 @@ window.addEventListener("load", async () => {
 				})
 			}
 		}
+
 		audio.addEventListener("timeupdate", timeChanged)
 
 		// Spacing between subtitles
