@@ -5,7 +5,7 @@ Sentry.init({ dsn: "https://be5edffe19ef4496b415f7f07eecab65@sentry.io/1866073" 
 const { mutate: moveArrayItem } = require("array-move")
 const mdc = require("material-components-web")
 const { promises: fs } = require("fs")
-const Observable = require("es6-observable")
+const { Observable } = require("rxjs")
 const isObjectEqual = require("fast-deep-equal/es6")
 const pify = require("pify")
 

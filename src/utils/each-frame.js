@@ -1,4 +1,4 @@
-const Observable = require("es6-observable")
+const { Observable } = require("rxjs")
 
 module.exports = new Observable(observer => {
 	const nextFrame = () => requestAnimationFrame(() => {
