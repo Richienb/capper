@@ -21,11 +21,11 @@ jobs:
         - stage: Deploy # Windows
           if: tag IS present
           os: windows
-          before_install:
-              - export GRADLE_OPTS=-Dorg.gradle.daemon=false
+          env:
+              - YARN_GPG=no
           script:
               - yarn electron-forge publish
-        - # MacOS
+        - # MacOSz
           if: tag IS present
           os: osx
           osx_image: xcode12
