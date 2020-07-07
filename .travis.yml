@@ -42,6 +42,9 @@ jobs:
                       - flatpak-builder
                       - elfutils
                       - snapcraft
+          install:
+              - flatpak --user install gnome org.freedesktop.Sdk/x86_64/1.4
+              - yarn
           script:
               - yarn electron-forge publish
           deploy:
