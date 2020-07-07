@@ -15,20 +15,20 @@ jobs:
         - stage: Test
           script:
               - yarn test
-        - stage: Deploy Windows binary
+        - stage: Deployment # Windows
           if: tag IS present
           os: windows
           before_install:
               - export GRADLE_OPTS=-Dorg.gradle.daemon=false
           script:
               - yarn electron-forge publish
-        - stage: Deploy MacOS binary
+        - # MacOS
           if: tag IS present
           os: osx
           osx_image: xcode12
           script:
               - yarn electron-forge publish
-        - stage: Deploy Linux binary
+        - # Linux
           if: tag IS present
           os: linux
           dist: bionic
