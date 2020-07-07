@@ -10,6 +10,9 @@ try {
 require("electron-debug")()
 require("update-electron-app")()
 
+// Fix filesystem access problems after reload (https://github.com/electron/electron/issues/22119)
+app.allowRendererProcessReuse = false
+
 // Bypass Chrome autoplay policy
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required")
 
