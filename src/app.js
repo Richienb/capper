@@ -2,18 +2,16 @@ const { remote: electron } = require("electron")
 const path = require("path")
 const Sentry = require("@sentry/electron")
 Sentry.init({ dsn: "https://be5edffe19ef4496b415f7f07eecab65@sentry.io/1866073" })
-const { mutate: moveArrayItem } = require("array-move")
-const mdc = require("material-components-web")
 const { promises: fs } = require("fs")
-const { Observable } = require("rxjs")
-const isObjectEqual = require("fast-deep-equal/es6")
+const { mutate: moveArrayItem } = require("array-move")
+const { fn: pCancelable } = require("p-cancelable")
+const mdc = require("material-components-web")
 const pify = require("pify")
-
+const pEachSeries = require("p-each-series")
+const delay = require("delay")
 const eachFrame = require("./utils/each-frame")
 const parseSrt = require("./utils/parse-srt")
 const webmToMp4 = require("./utils/webm-to-mp4")
-
-electron.getCurrentWindow().removeAllListeners()
 
 const calculateWidth = resolution => resolution / 9 * 16
 const calculateHeight = resolution => resolution * 9 / 16
@@ -146,7 +144,15 @@ window.addEventListener("load", async () => {
 	const renderer = document.querySelector(".renderer")
 	const viewable = document.querySelector(".viewable")
 
+	let progress
+
 	eachFrame.subscribe(() => {
+		// If a progress bar exists
+		if (progress) {
+			// Update the width of the progress bar foreground
+			progress.set("width", audio.currentTime / audio.duration * (canvas.width - rem(3)))
+		}
+
 		// Re-render all dirty objects
 		canvas.renderAll()
 
@@ -154,7 +160,15 @@ window.addEventListener("load", async () => {
 		viewable.getContext("2d").drawImage(renderer, 0, 0, renderer.width, renderer.height, 0, 0, viewable.width, viewable.height)
 	})
 
+	let subtitleRenderer
+
 	async function play() {
+		// Cancel the rendering of currently playing subtitles and progress bar updating
+		// TODO: Use optional chaining when Electron supports Node.js 14
+		if (subtitleRenderer) {
+			subtitleRenderer.cancel()
+		}
+
 		// Clear the canvas
 		canvas.clear()
 
@@ -180,7 +194,7 @@ window.addEventListener("load", async () => {
 		}))
 
 		// Progress bar foreground
-		const progress = new fabric.Rect({
+		progress = new fabric.Rect({
 			width: 0, height: rem(0.5),
 			left: rem(1.5), top: canvas.height - rem(2),
 			fill: "#f44336"
@@ -251,83 +265,101 @@ window.addEventListener("load", async () => {
 			}
 		})
 
-		// For each fire of requestAnimationFrame
-		eachFrame.subscribe(() => {
-			// Update the width of the progress bar foreground
-			progress.set("width", audio.currentTime / audio.duration * (canvas.width - rem(3)))
-		})
-
 		// Spacing between subtitles
 		const subSpacing = rem(5.5)
 
-		// Watch for each subtitle change
-		new Observable(observer => {
-			// Current subtitle
-			let currentSubtitle = {}
+		// Set the main subtitle renderer
+		subtitleRenderer = pCancelable((_, onCancel) => {
+			let isCanceled = false
 
-			eachFrame.subscribe(() => {
-				// Complete observer if finished playing
-				if (audio.currentTime === audio.duration) {
-					observer.complete()
+			onCancel.shouldReject = false
+			onCancel(() => {
+				isCanceled = true
+			})
+
+			return pEachSeries(subtitles, async ({ start: startTime, text: currentSubtitle }, subtitleIndex) => {
+				// If rendering has already been canceled
+				if (isCanceled) {
+					return
 				}
 
-				// Get current time as milliseconds
-				const currentTime = audio.currentTime * 1000
+				// Wait until the subtitle should be displayed
+				await delay(startTime - (audio.currentTime * 1000))
 
-				subtitles.forEach((subtitle, subtitleIndex) => {
-					const { start, end, text: currentSubtitleText } = subtitle
+				// If rendered has been canceled
+				if (isCanceled) {
+					return
+				}
 
-					// If current subtitle
-					if (currentTime > start && (subtitles[subtitleIndex + 1] ? currentTime < subtitles[subtitleIndex + 1].start : currentTime < end) && !isObjectEqual(currentSubtitle, subtitle)) {
-						// Save subtitle
-						currentSubtitle = subtitle
-
-						// Trigger observer
-						observer.next({
-							// TODO: Use optional chaining when Electron supports Node.js 14.
-							previousSubtitle: subtitles[subtitleIndex - 1] && subtitles[subtitleIndex - 1].text,
-							currentSubtitle: currentSubtitleText,
-							nextSubtitle: subtitles[subtitleIndex + 1] && subtitles[subtitleIndex + 1].text,
-							subtitleIndex
-						})
+				// Remove invisible elements
+				canvas.getObjects().forEach(fabricObject => {
+					if (fabricObject.get("opacity") === 0) {
+						canvas.remove(fabricObject)
 					}
 				})
-			})
-		}).subscribe(({ previousSubtitle, currentSubtitle, nextSubtitle, subtitleIndex }) => {
-			// Remove invisible elements
-			canvas.getObjects().forEach(object => (object.get("opacity") === 0 ? canvas.remove(object) : ""))
 
-			// Increase size and brightness for active stub
-			stubs[subtitleIndex].animate("opacity", 1, animationOptions)
-			stubs[subtitleIndex].animate("height", stubHeight * 1.5, animationOptions)
-			stubs[subtitleIndex].animate("top", canvas.height - rem(2.35), animationOptions)
+				// Get the previous and next subtitles
+				const previousSubtitle = subtitles[subtitleIndex - 1] && subtitles[subtitleIndex - 1].text
+				const nextSubtitle = subtitles[subtitleIndex + 1] && subtitles[subtitleIndex + 1].text
 
-			if (previousSubtitle) {
-				// Revert previous stub
-				stubs[subtitleIndex - 1].animate("opacity", 0.8, animationOptions)
-				stubs[subtitleIndex - 1].animate("height", stubHeight, animationOptions)
-				stubs[subtitleIndex - 1].animate("top", canvas.height - stubHeight - rem(1.35), animationOptions)
+				// Increase size and brightness for active stub
+				stubs[subtitleIndex].animate("opacity", 1, animationOptions)
+				stubs[subtitleIndex].animate("height", stubHeight * 1.5, animationOptions)
+				stubs[subtitleIndex].animate("top", canvas.height - rem(2.35), animationOptions)
 
-				// Previous subtitle -> Removed
-				if (subs[0]) {
-					subs[0].animate("opacity", "0", animationOptions)
-					subs[0].animate("top", `-=${subSpacing}`, animationOptions)
-				}
+				if (previousSubtitle) {
+					// Revert previous stub
+					stubs[subtitleIndex - 1].animate("opacity", 0.8, animationOptions)
+					stubs[subtitleIndex - 1].animate("height", stubHeight, animationOptions)
+					stubs[subtitleIndex - 1].animate("top", canvas.height - stubHeight - rem(1.35), animationOptions)
 
-				// Current subtitle -> Previous subtitle
-				subs[1].animate("opacity", "0.8", animationOptions)
-				subs[1].animate("top", `-=${subSpacing}`, animationOptions)
-				subs[1].set("fontFamily", fontFamily.normal)
-				moveArrayItem(subs, 1, 0)
+					// Previous subtitle -> Removed
+					if (subs[0]) {
+						subs[0].animate("opacity", "0", animationOptions)
+						subs[0].animate("top", `-=${subSpacing}`, animationOptions)
+					}
 
-				// Next subtitle -> Current subtitle
-				subs[2].animate("opacity", "1", animationOptions)
-				subs[2].animate("top", `-=${subSpacing}`, animationOptions)
-				subs[2].set("fontFamily", fontFamily.medium)
-				moveArrayItem(subs, 2, 1)
+					// Current subtitle -> Previous subtitle
+					subs[1].animate("opacity", "0.8", animationOptions)
+					subs[1].animate("top", `-=${subSpacing}`, animationOptions)
+					subs[1].set("fontFamily", fontFamily.normal)
+					moveArrayItem(subs, 1, 0)
 
-				// None -> Next subtitle
-				if (nextSubtitle) {
+					// Next subtitle -> Current subtitle
+					subs[2].animate("opacity", "1", animationOptions)
+					subs[2].animate("top", `-=${subSpacing}`, animationOptions)
+					subs[2].set("fontFamily", fontFamily.medium)
+					moveArrayItem(subs, 2, 1)
+
+					// None -> Next subtitle
+					if (nextSubtitle) {
+						subs[2] = new fabric.Text(nextSubtitle, {
+							fontFamily: fontFamily.normal,
+							fill: "white",
+							fontSize: rem(3),
+							opacity: 0
+						})
+						canvas.add(subs[2])
+						subs[2].centerV()
+						subs[2].centerH()
+						subs[2].set("top", subs[2].get("top") + (subSpacing * 2))
+
+						subs[2].animate("opacity", "0.8", animationOptions)
+						subs[2].animate("top", `-=${subSpacing}`, animationOptions)
+					}
+				} else {
+					// Current subtitle
+					subs[1] = new fabric.Text(currentSubtitle, {
+						fontFamily: fontFamily.medium,
+						fill: "white",
+						fontSize: rem(3),
+						opacity: 0
+					})
+					canvas.add(subs[1])
+					subs[1].centerV()
+					subs[1].centerH()
+
+					// Next subtitle
 					subs[2] = new fabric.Text(nextSubtitle, {
 						fontFamily: fontFamily.normal,
 						fill: "white",
@@ -337,94 +369,68 @@ window.addEventListener("load", async () => {
 					canvas.add(subs[2])
 					subs[2].centerV()
 					subs[2].centerH()
-					subs[2].set("top", subs[2].get("top") + (subSpacing * 2))
+					subs[2].set("top", subs[2].get("top") + subSpacing)
 
+					// Add subtitles
+					subs[1].animate("opacity", "1", animationOptions)
 					subs[2].animate("opacity", "0.8", animationOptions)
-					subs[2].animate("top", `-=${subSpacing}`, animationOptions)
-				}
-			} else {
-				// Current subtitle
-				subs[1] = new fabric.Text(currentSubtitle, {
-					fontFamily: fontFamily.medium,
-					fill: "white",
-					fontSize: rem(3),
-					opacity: 0
-				})
-				canvas.add(subs[1])
-				subs[1].centerV()
-				subs[1].centerH()
 
-				// Next subtitle
-				subs[2] = new fabric.Text(nextSubtitle, {
-					fontFamily: fontFamily.normal,
-					fill: "white",
-					fontSize: rem(3),
-					opacity: 0
-				})
-				canvas.add(subs[2])
-				subs[2].centerV()
-				subs[2].centerH()
-				subs[2].set("top", subs[2].get("top") + subSpacing)
+					const titleAnimationOptions = {
+						...animationOptions,
+						duration: 500
+					}
 
-				// Add subtitles
-				subs[1].animate("opacity", "1", animationOptions)
-				subs[2].animate("opacity", "0.8", animationOptions)
+					// Transition out the prominent album cover image
+					albumImage.animate("top", albumImage.top - rem(2), titleAnimationOptions)
+					albumImage.animate("opacity", 0, titleAnimationOptions)
 
-				const titleAnimationOptions = {
-					...animationOptions,
-					duration: 500
-				}
+					// Fade out the title when the first subtitle starts
+					title.forEach(object => object.animate("opacity", "0", titleAnimationOptions))
 
-				// Transition out the prominent album cover image
-				albumImage.animate("top", albumImage.top - rem(2), titleAnimationOptions)
-				albumImage.animate("opacity", 0, titleAnimationOptions)
-
-				// Fade out the title when the first subtitle starts
-				title.forEach(object => object.animate("opacity", "0", titleAnimationOptions))
-
-				// Smaller album cover image to be displayed in the top-left.
-				albumImage.clone(newAlbumImage => {
-					newAlbumImage.set({
-						top: 0,
-						left: 32,
-						opacity: 0,
-						clipPath: roundedCorners(albumImage, 16)
+					// Smaller album cover image to be displayed in the top-left.
+					albumImage.clone(newAlbumImage => {
+						newAlbumImage.set({
+							top: 0,
+							left: 32,
+							opacity: 0,
+							clipPath: roundedCorners(albumImage, 16)
+						})
+						newAlbumImage.scaleToWidth(64)
+						canvas.add(newAlbumImage)
+						newAlbumImage.animate("opacity", 1, titleAnimationOptions)
+						newAlbumImage.animate("top", 32, titleAnimationOptions)
 					})
-					newAlbumImage.scaleToWidth(64)
-					canvas.add(newAlbumImage)
-					newAlbumImage.animate("opacity", 1, titleAnimationOptions)
-					newAlbumImage.animate("top", 32, titleAnimationOptions)
-				})
 
-				// Smaller song name text to be displayed in the top-left.
-				const newSongNameText = new fabric.Text(options_.name, {
-					fontFamily: fontFamily.normal,
-					fill: "white",
-					fontSize: rem(2),
-					left: 112,
-					top: 0,
-					opacity: 0
-				})
-				canvas.add(newSongNameText)
-				newSongNameText.animate("opacity", 1, titleAnimationOptions)
-				newSongNameText.animate("top", 32, titleAnimationOptions)
-
-				// Small artist name text to be displayed in the top-left.
-				if (options_.artist) {
-					const artistNameText = new fabric.Text(options_.artist, {
+					// Smaller song name text to be displayed in the top-left.
+					const newSongNameText = new fabric.Text(options_.name, {
 						fontFamily: fontFamily.normal,
 						fill: "white",
-						fontSize: rem(1.25),
-						left: 113,
-						top: 32,
+						fontSize: rem(2),
+						left: 112,
+						top: 0,
 						opacity: 0
 					})
-					canvas.add(artistNameText)
-					artistNameText.animate("opacity", 1, titleAnimationOptions)
-					artistNameText.animate("top", 68, titleAnimationOptions)
+					canvas.add(newSongNameText)
+					newSongNameText.animate("opacity", 1, titleAnimationOptions)
+					newSongNameText.animate("top", 32, titleAnimationOptions)
+
+					// Small artist name text to be displayed in the top-left.
+					if (options_.artist) {
+						const artistNameText = new fabric.Text(options_.artist, {
+							fontFamily: fontFamily.normal,
+							fill: "white",
+							fontSize: rem(1.25),
+							left: 113,
+							top: 32,
+							opacity: 0
+						})
+						canvas.add(artistNameText)
+						artistNameText.animate("opacity", 1, titleAnimationOptions)
+						artistNameText.animate("top", 68, titleAnimationOptions)
+					}
 				}
-			}
-		})
+			})
+		})(undefined)
 	}
 
 	const toggleSettingsEnabled = isEnabled => {
