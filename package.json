@@ -65,9 +65,7 @@
 				{
 					"name": "@electron-forge/maker-squirrel",
 					"config": {
-						"name": "Capper",
-						"iconUrl": "src/icon.ico",
-						"setupIcon": "src/icon.ico"
+						"name": "Capper"
 					}
 				},
 				{
