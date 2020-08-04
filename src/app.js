@@ -10,6 +10,7 @@ const pify = require("pify")
 const pEachSeries = require("p-each-series")
 const delay = require("delay")
 const { parse: parseSrt } = require("subtitle")
+const $ = require("cash-dom")
 const eachFrame = require("./utils/each-frame")
 const webmToMp4 = require("./utils/webm-to-mp4")
 
@@ -20,8 +21,6 @@ const calculateHeight = resolution => resolution * 9 / 16
 const version = electron.app.getVersion()
 
 window.addEventListener("load", async () => {
-	const $ = require("jquery")
-
 	mdc.autoInit()
 
 	require("./fabric")
@@ -77,7 +76,7 @@ window.addEventListener("load", async () => {
 	// Handle file inputs
 	function fileInput(name) {
 		const element = `.options__${name}`
-		$(element).on("click", () => $(`${element}-select`).click())
+		$(element).on("click", () => $(`${element}-select`).trigger("click"))
 		$(`${element}-select`).on("change", () => {
 			const file = $(`${element}-select`).get(0).files[0]
 			if (file) {
