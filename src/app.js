@@ -11,8 +11,8 @@ const delay = require("delay")
 const { parse: parseSrt } = require("subtitle")
 const mdc = require("material-components-web")
 const $ = require("cash-dom")
+const webmToMp4 = require("webm-to-mp4")
 const eachFrame = require("./utils/each-frame")
-const webmToMp4 = require("./utils/webm-to-mp4")
 
 const calculateWidth = resolution => resolution / 9 * 16
 const calculateHeight = resolution => resolution * 9 / 16
